@@ -357,6 +357,7 @@ export default function App() {
                             queueUpdate
                         )
                     );
+                    break;
                 case Globals.UPDATES.OWNED_CHAMPIONS_UPDATE:
                     // eslint-disable-next-line no-case-declarations
                     const ownedChampions = message.data as OwnedChampion[];
@@ -413,7 +414,7 @@ export default function App() {
                     );
                     break;
                 case Globals.UPDATES.CHALLENGE_SUMMARY_UPDATE:
-                    const challengeUpdate = message.data as SingleChallengeUpdate;
+                    const challengeUpdate = message.data as ChallengeSummaryUpdateData;
                     dispatch(
                         ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE(
                             challengeUpdate

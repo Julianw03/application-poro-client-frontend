@@ -12,7 +12,7 @@
     "indent": [2, 4, {"SwitchCase": 1}],
     "quotes": [2, "single"],
     "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}],
-    "no-unused-vars": [1, { "args": "none" }],
+    "no-unused-vars": "warn",
     "camelcase": 1,
     "no-alert": 1,
     "no-case-declarations": "off",
