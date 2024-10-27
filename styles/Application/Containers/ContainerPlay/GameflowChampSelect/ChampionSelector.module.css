@@ -1,0 +1,97 @@
+.champSelectContainer {
+    height: 100%;
+    width: 100%;
+
+    box-sizing: border-box;
+
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 20%);
+    grid-auto-rows: 25.0%;
+
+    overflow-y: scroll;
+}
+
+.contentWrapper {
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.innerCard {
+    height: 90%;
+    width: 90%;
+
+    border: rgb(128, 128, 128) solid 2px;
+}
+
+.active {
+    border: rgb(0, 0, 0) solid 2px;
+}
+
+.innerCard:hover {
+    background-color: #f0f0f0;
+}
+
+.innerCard:hover .championImage {
+    transition: scale 0.25s;
+}
+
+.imageContainer {
+    height: 80%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+.textContainer {
+    height: 20%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+.championImage {
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
+    object-position: 50% 50%;
+    scale: 1.2;
+}
+
+.unselectable {
+    filter: grayscale(100%);
+}
+
+.buttonContainer {
+    position: absolute;
+
+    height: 5%;
+    width: 10%;
+
+    top: 93%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+.button {
+    height: 100%;
+    width: 100%;
+
+    background-color: #0070f3;
+}

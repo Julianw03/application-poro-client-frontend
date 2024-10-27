@@ -1,0 +1,512 @@
+
+.baseContainer {
+    position: absolute;
+    top: 6%;
+    height: 94%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/*Default*/
+.defaultChampSelectContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+
+.myTeamContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.myTeamBansSection {
+    flex: 1;
+    height: 10%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.singleBanContainer {
+    height: 100%;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.banIconContainer {
+    height: 90%;
+    aspect-ratio: 1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    object-fit: contain;
+    filter: grayscale(100%);
+}
+
+.icon {
+    height: 100%;
+    width: 100%;
+
+
+    object-fit: contain;
+}
+
+
+
+.myTeamPickSection {
+    flex: 6.5;
+    height: 65%;
+}
+
+.myTeamUtilSection {
+    flex: 2.5;
+    height: 25%;
+}
+
+.middleContainer {
+    flex: 3;
+    display: flex;
+    flex-direction: column
+}
+
+.middleTopSection {
+    flex: 1;
+    height: 10%;
+    border: red solid 2px;
+}
+
+.middleMidSection {
+    flex: 8;
+    height: 80%;
+    border: green solid 2px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.middleBotSection {
+    flex: 1;
+    height: 10%;
+    border: green solid 2px;
+}
+
+.enemyTeamContainer {
+    border: red solid 1px;
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.enemyTeamBansSection {
+    flex: 1;
+    height: 10%;
+    border: red solid 2px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.enemyTeamPickSection {
+    flex: 6.5;
+    height: 65%;
+    border: green solid 2px;
+}
+
+.enemyTeamUtilSection {
+    flex: 2.5;
+    height: 25%;
+    border: red solid 2px;
+}
+
+
+/* Champion Name Tooltip*/
+.championNameTooltipFont {
+    font-family: "Beaufort for LOL";
+    font-size: 1.2rem;
+}
+
+
+
+
+/* BANNING */
+.champSelectBANNING {
+    position: relative;
+    flex-basis: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    height: 100%;
+    margin: 10px 20px 10px 25px;
+    max-height: calc(70% * 0.22);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.champSelectBANNING::before {
+    --border_color: red;
+    --secondary_color: transparent;
+    content: '';
+    position: absolute;
+    aspect-ratio: 1;
+    width: 150%;
+    background-image: conic-gradient(var(--secondary_color) 0deg, var(--secondary_color) 110deg, var(--border_color) 120deg, var(--border_color) 180deg, var(--secondary_color) 180deg, var(--secondary_color) 290deg, var(--border_color) 300deg, var(--border_color) 360deg);
+    animation: spin cubic-bezier(.17, .67, .83, .67) 4s infinite;
+}
+
+.borderBox {
+    border: 0;
+    outline: 0;
+    position: relative;
+    width: 99%;
+    height: 96%;
+    background: #181a1b;
+    opacity: 1;
+    border-radius: 19px;
+    overflow: hidden;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.banningBGContainer {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes banBlackout {
+    0% {
+        backdrop-filter: grayscale(0);
+    }
+    100% {
+        backdrop-filter: grayscale(1);
+    }
+}
+
+.banningBGImage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0 20%;
+}
+
+.banningBGFilter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, transparent, #181a1b);
+    backdrop-filter: grayscale(1);
+    /*animation: banBlackout linear 0.5s;*/
+    overflow: hidden;
+    border-radius: 19px;
+}
+
+/* PICKING */
+
+.champSelectPICKING {
+    position: relative;
+    flex-basis: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    height: 100%;
+    margin: 10px 20px 10px 25px;
+    max-height: calc(70% * 0.22);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.champSelectPICKING::before {
+    --border_color: white;
+    --secondary_color: transparent;
+    content: '';
+    position: absolute;
+    aspect-ratio: 1;
+    width: 150%;
+    background-image: conic-gradient(var(--secondary_color) 0deg, var(--secondary_color) 110deg, var(--border_color) 120deg, var(--border_color) 180deg, var(--secondary_color) 180deg, var(--secondary_color) 290deg, var(--border_color) 300deg, var(--border_color) 360deg);
+    animation: spin cubic-bezier(.17, .67, .83, .67) 4s infinite;
+    animation-delay: -0s;
+}
+
+/* PICKING-SELF */
+
+.champSelectPICKING_SELF {
+    position: relative;
+    flex-basis: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    height: 100%;
+    margin: 10px 20px 10px 25px;
+    max-height: calc(70% * 0.22);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.champSelectPICKING_SELF::before {
+    --border_color: gold;
+    --secondary_color: transparent;
+    content: '';
+    position: absolute;
+    aspect-ratio: 1;
+    width: 150%;
+    background-image: conic-gradient(var(--secondary_color) 0deg, var(--secondary_color) 110deg, var(--border_color) 120deg, var(--border_color) 180deg, var(--secondary_color) 180deg, var(--secondary_color) 290deg, var(--border_color) 300deg, var(--border_color) 360deg);
+    animation: spin cubic-bezier(.17, .67, .83, .67) 5s infinite;
+    animation-delay: -0s;
+}
+
+
+
+.pickingBGContainer {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.pickingBGImage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0 20%;
+}
+
+.pickingBGFilter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, transparent, #181a1b);
+}
+
+/* FINALIZATION */
+.champSelectFINALIZATION {
+    position: relative;
+    flex-basis: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    height: 100%;
+    margin: 10px 20px 10px 25px;
+    max-height: calc(70% * 0.22);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.finalizationBGContainer {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+.finalizationBGImage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 0% 25%;
+    animation: zoomIn 0.5s;
+}
+
+
+@keyframes zoomIn {
+    0% {
+        width: 150%;
+        height: 150%;
+    }
+    100% {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.finalizationBGFilter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, transparent, #181a1b);
+}
+
+.teammateContent {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.finalizationContentSummonerSpells {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 10%;
+    height: 90%;
+    left: 5%;
+    top: 5%;
+}
+
+.champSelectComponentSummonerSpellImage {
+    height: 80%;
+    width: 80%;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: 50% 50%;
+
+    outline: none;
+    border: none;
+}
+
+.finalizationContentSummonerSpellContainer {
+    left: 0;
+    top: 0;
+    height: 50%;
+    width: 100%;
+    max-height: 50%;
+    max-width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.championNameContainer {
+    position: absolute;
+    height: 30%;
+    width: 30%;
+    top: 15%;
+    right: 9%;
+    text-align: right;
+    font-family: "Beaufort for LOL";
+    font-weight: 600;
+    font-size: 1.3em;
+}
+
+.enemyChampionNameContainer {
+    position: absolute;
+    height: 30%;
+    width: 30%;
+    top: 15%;
+    left: 9%;
+    text-align: left;
+    font-family: "Beaufort for LOL";
+    font-weight: 600;
+    font-size: 1.3em;
+}
+
+.statusContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: 70%;
+    width: 30%;
+    top: 15%;
+    right: 8%;
+    text-align: right;
+    font-family: "Beaufort for LOL";
+    font-weight: 500;
+    font-size: 1.0em;
+}
+.singleStatus {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    flex: 1;
+}
+
+.positionContainer {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1%;
+    width: 5%;
+    aspect-ratio: 1;
+}
+
+.positionImage {
+    object-fit: contain;
+    object-position: center;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+
+.aramBench {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.benchChampionContainer {
+    width: 10%;
+    height: 100%;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.aramSkinSelector {
+    height: 25%;
+    width: 100%;
+}
+
+.aramButtons {
+    height: 10%;
+    width: 100%;
+}
+
+
+.skinSelector {
+    height: 25%;
+    width: 100%;
+}
+

@@ -1,0 +1,24 @@
+{
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["html", "@typescript-eslint"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "no-console": "off",
+    "indent": [2, 4, {"SwitchCase": 1}],
+    "quotes": [2, "single"],
+    "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}],
+    "no-unused-vars": [1, { "args": "none" }],
+    "camelcase": 1,
+    "no-alert": 1,
+    "no-case-declarations": "off",
+    "no-var": 0,
+    "no-trailing-spaces": 1,
+    "no-underscore-dangle": [0, { "allow": [] }],
+    "semi": 1
+  }
+}

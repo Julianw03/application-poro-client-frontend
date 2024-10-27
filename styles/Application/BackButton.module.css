@@ -1,0 +1,25 @@
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+
+    padding: 0.67dvw;
+    width: 7dvw;
+    aspect-ratio: 2;
+
+    font-weight: bold;
+    font-size: 1.2dvw;
+
+    z-index: 10;
+}
+
+.container::before {
+    letter-spacing: -0.05dvw;
+    content: "<< ";
+}
+
+.container:hover {
+    cursor: pointer;
+    color: #0070f3;
+}

@@ -1,0 +1,14 @@
+.headerSection {
+    height: 6%;
+    width: 100%;
+}
+
+.bodySection {
+    height: 94%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}

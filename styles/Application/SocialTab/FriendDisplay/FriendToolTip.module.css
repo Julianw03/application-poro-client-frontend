@@ -1,0 +1,121 @@
+.fillContainer {
+    height: 100%;
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.backdropContentContainer {
+    position: relative;
+
+    height: 100%;
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    width: 100%;
+}
+
+.objectFitCover {
+    object-fit: cover;
+}
+
+
+
+.backdropImageContainer {
+    flex: 10;
+    height: 100%;
+    width: 100%;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: 25%;
+    background-attachment: fixed;
+}
+
+.contentContainer {
+    height: 100%;
+    width: 100%;
+
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,1) 55%, rgba(0,0,0,1) 100%);
+
+    transform: translateY(-100%);
+
+    display: grid;
+    grid-template-rows: [top-content] 55% [center-content] 35% [bottom-content] 10%;
+    grid-template-columns: [left-content-start] 33.333% [left-content-end] 33.333% [right-content-start] 33.333% [right-content-end];
+}
+
+.topContent {
+    grid-row: top-content;
+    grid-column-start: left-content-start;
+    grid-column-end: right-content-end;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: rebeccapurple solid 2px;
+}
+
+.activityDiv {
+    grid-row: bottom-content;
+    grid-column-start: left-content-start;
+    grid-column-end: right-content-end;
+
+    border: green solid 2px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.activityIcon {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+
+    border: rebeccapurple solid 2px;
+}
+
+.activityDescription {
+    flex: 10;
+    height: 100%;
+    width: 100%;
+    text-align: start;
+
+    border: rebeccapurple solid 2px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.activityTimer {
+    flex: 2;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.friendName {
+    border: rebeccapurple solid 2px;
+    font-size: 0.85dvw;
+    text-wrap: wrap;
+    font-weight: bold;
+}

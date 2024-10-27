@@ -1,0 +1,43 @@
+{
+  "name": "poro-client-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env IS_DEV=true DO_EXPORT=false next dev",
+    "build": "cross-env IS_DEV=false DO_EXPORT=true next build",
+    "start": "cross-env IS_DEV=false DO_EXPORT=false next start",
+    "build-workers": "tsc && for /r %f in (./workers/*.ts) do ren \"%f\" \"%%~nf.js\"",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.16.4",
+    "@reduxjs/toolkit": "^2.0.1",
+    "@types/howler": "^2.2.11",
+    "@types/react-redux": "^7.1.33",
+    "axios": "^1.6.5",
+    "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
+    "eslint-plugin-html": "^7.1.0",
+    "howler": "^2.2.4",
+    "next": "^14.2.3",
+    "react": "^18",
+    "react-bootstrap": "^2.10.2",
+    "react-dom": "^18",
+    "react-redux": "^9.1.0",
+    "use-sound": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.0.4",
+    "typescript": "^5.5.4"
+  }
+}

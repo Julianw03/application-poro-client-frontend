@@ -1,0 +1,6 @@
+.powerButton {
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: var(--pc-grey1);
+}

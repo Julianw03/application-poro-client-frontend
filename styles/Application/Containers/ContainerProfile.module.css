@@ -1,0 +1,320 @@
+.previewSpace {
+    position: relative;
+    height: 100%;
+    width: 106%;
+    bottom: 0;
+    left: 0;
+
+
+    --crystal-level-url: url("http://localhost:35199/static/assets/png/challenges/crystals/iron.png");
+
+    background-color: grey;
+}
+
+.backgroundImageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.coverImage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.containImage {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.backgroundImageFilter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(transparent, rgba(0, 0, 0, 1));;
+}
+
+.bannerArea {
+    position: relative;
+    top: 0;
+    left: 2%;
+    width: 18%;
+    height: 100%;
+}
+
+.banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-height: 100%;
+    aspect-ratio: 0.39189189;
+}
+
+.bannerImageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+.spacer {
+    height: 25%;
+    width: 100%;
+}
+
+.levelProgress {
+    width: 100%;
+    height: 8%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: "Spiegel";
+}
+
+.levelText {
+    overflow: hidden;
+    font-family: "Beaufort for LOL";
+    font-size: min(1.5dvw, 1.5em);
+    color: white;
+
+    font-weight: bold;
+
+    height: 100%;
+    aspect-ratio: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform: translateY(50%);
+}
+
+.profileSection {
+    width: 100%;
+    max-height: 30%;
+    aspect-ratio: 1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.profileContainer {
+    height: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bannerImage {
+    top: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: scale-down;
+    object-position: 50% 0;
+}
+
+.profileIcon {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.profileIcon::before {
+    content: "";
+    position: absolute;
+    height: 40%;
+    width: 40%;
+    border-radius: 50%;
+
+    top: 52%;
+    left: 50%;
+
+    z-index: 1;
+
+    transform: translate(-50%, -50%);
+    background-position: center;
+    background-size: cover;
+    background-image: url("http://127.0.0.1:35199/proxy/static/lol-game-data/assets/v1/profile-icons/4025.jpg")
+}
+
+.profileIcon::after {
+    content: "";
+    position: absolute;
+
+    height: 40%;
+    width: 40%;
+
+    top: 83%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 100;
+
+    background-position: center;
+    background-size: cover;
+    background-image: var(--crystal-level-url);
+}
+
+.prestigeRegalia::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url("http://127.0.0.1:35199/static/assets/png/regalia/prestige/regalia-prestige-3.png");
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+
+.rankedRegalia {;
+    height: 100%;
+    width: 100%;
+}
+
+.rankedRegalia::before {
+    content: "";
+    position: absolute;
+    top: -12.5%;
+    left: 0;
+
+    z-index: 1;
+
+    scale: 1.2;
+
+    height: 100%;
+    width: 100%;
+
+    background-position: center;
+    background-size: cover;
+    background-image: url("http://127.0.0.1:35199/static/assets/png/regalia/plate/wings_gold_plate.png");
+}
+
+.rankedRegaliaVideo {
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
+    transform: scale(1.2) translateY(-12%);
+
+    z-index: -1;
+}
+
+.profileWrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.nameSection {
+    width: 100%;
+    height: 5%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: "Spiegel";
+}
+
+.nameWrapper {
+    height: 100%;
+    aspect-ratio: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    color: white;
+
+    font-family: "Beaufort for LOL";
+
+    font-size: min(1.2dvw, 1.2em);
+    font-weight: bolder;
+    user-select: none;
+}
+
+.tokenSection {
+    width: 100%;
+    height: 12%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: "Spiegel";
+
+}
+
+.tokenWrapper {
+    height: 100%;
+    aspect-ratio: 1.70;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.tokenTitle {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #CBCBCBF9;
+
+    font-family: "Beaufort for LOL";
+    font-size: min(1.1dvw, 1.1em);
+    overflow: hidden;
+
+    user-select: none;
+}
+
+.tokens {
+    flex: 3;
+    height: 100%;
+    width: 90%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: row;
+}
+
+.singleToken {
+    flex: 1;
+    height: 60%;
+    aspect-ratio: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tokenImage {
+    height: 100%;
+    width: 100%;
+
+    object-fit: contain;
+    user-select: none;
+}

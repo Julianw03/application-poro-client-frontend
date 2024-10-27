@@ -1,0 +1,55 @@
+.container {
+    z-index: 1000;
+
+    position: absolute;
+    height: 3dvw;
+    width: 3dvw;
+
+    bottom: 0;
+    left: 0;
+
+    margin: 10px;
+    padding: 10px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    background-color: var(--pc-grey3);
+    border-radius: 10000000px;
+}
+
+.expanded {
+    width: fit-content;
+}
+
+.bar {
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 1;
+    transform: rotate(0deg) translate(0, 0);
+    stroke: var(--pc-grey1)
+}
+
+.topBar {
+    transform-origin:left;
+    transform: rotate(45deg) translate(-12.5%,-12.5%);
+}
+
+.middleBar {
+    opacity: 0;
+}
+
+.bottomBar {
+    transform-origin: left;
+    transform: rotate(-45deg) translate(-12.5%,12.5%);
+}
+
+
+.singleSvgElement {
+    position: relative;
+    width: 3dvw;
+    height: 100%;
+    cursor: pointer;
+}

@@ -1,0 +1,197 @@
+.lobbyMemberCard {
+    position: relative;
+    flex: 1;
+    margin: 10px;
+    padding: 0px;
+    height: 100%;
+    max-width: 20vw;
+    align-content: center;
+    text-align: center;
+    border: #5B5A56 solid;
+}
+
+.lobbyMemberCard:hover {
+    border: #3C3C41 solid;
+}
+
+.bannerDisplay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    z-index: -1;
+}
+
+.bannerDisplayImage {
+
+}
+
+.noDrag {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.displayName {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2dvw;
+    font-weight: 600;
+    font-family: "Beaufort for LOL";
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    aspect-ratio: 5;
+    top: 50%;
+}
+
+.leaderCrownContainer {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    object-fit: fill;
+    width: 10%;
+    top: 54.5%;
+    left: 12%;
+}
+
+.leaderCrownImage {
+    height: 100%;
+    width: 100%;
+}
+
+.title {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    top: 50%;
+
+}
+
+.dualPositionsContainer {
+    display: flex;
+    position: absolute;
+    left: 20%;
+    width: 60%;
+    height: auto;
+    top: 65%;
+}
+
+.singlePositionContainer {
+    position: absolute;
+    display: flex;
+    left: 35%;
+    width: 30%;
+    top: 65%;
+}
+
+.position {
+    position: relative;
+    align-content: center;
+    flex: 1;
+}
+
+.positionImage {
+    width: 60%;
+    margin: 10%;
+}
+
+
+.tokenContainer {
+    width: 100%;
+    position: absolute;
+}
+
+.profileContainer {
+    margin: 0;
+    position: absolute;
+    width: 70%;
+    aspect-ratio: 1;
+    left: 15%;
+    object-fit: contain;
+    top: 15%;
+    overflow: visible;
+}
+
+
+.profileImage {
+    padding: 0;
+    margin: 0;
+    left: 0;
+    position: absolute;
+    scale: 0.5;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 50%;
+    border: none;
+    z-index: 1;
+}
+
+.prestigeImage {
+    max-width: none;
+    left: 0;
+    top: 0;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    height: 125%;
+    width: 125%;
+    transform: translate(-10%,-12%);
+    z-index: 1;
+}
+
+.rankedAnimatedContainer {
+    position: absolute;
+    padding: 0px;
+    margin: 0px;
+    height: 150%;
+    width: 150%;
+    left: 0;
+    transform: translate(-16.5%,-29.5%);
+    border: transparent;
+}
+
+.rankedImage {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.rankedVideo {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.regaliaTooltip {
+    min-height: 500px;
+    min-width: 500px ;
+    border: red solid 2px;
+
+    background: #2f2f2f;
+}
+
+.full {
+    height: 100%;
+    width: 100%;
+}
+

@@ -1,0 +1,241 @@
+.container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.tftContainer {
+    position: relative;
+
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    padding-bottom: 1dvh;
+
+    display: flex;
+    flex-direction: row;
+
+    overflow: hidden;
+}
+
+.tftSubGroup {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: calc(1/3 * 100%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tftSelfGroup {
+    width: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: calc(2/3 * 100%);
+
+    padding: 2%;
+
+    border: #0070f3 solid 2px;
+}
+
+.tftSingleGroup {
+    width: 100%;
+    height: calc(1/3 * 100%);
+
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    padding: 2%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: blue solid 2px;
+}
+
+.tftInviteButtonContainer {
+    position: relative;
+    height: 50%;
+    aspect-ratio: 1;
+
+    border-radius: 1000000px;
+    border: red solid 2px;
+}
+
+
+.lobby_type_display {
+    cursor: pointer;
+    position: absolute;
+    text-align: right;
+    font-weight: 500;
+    font-family: "Beaufort for LOL";
+    width: 96.0%;
+    top: 2%;
+    left: 2%;
+    font-size: 120%;
+}
+
+
+
+.positionSelectContainer {
+    position: absolute;
+    display: flex;
+    height: 5%;
+    width: 8%;
+    left: 65%;
+    top: 88%;
+}
+
+
+.lobby_container {
+    font-family: "Beaufort for LOL";
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    align-content: center;
+    top: 0;
+    left: 0.5%;
+    height: 100%;
+    width: 99%;
+}
+
+.member_container {
+    position: relative;
+    display: flex;
+    left: 0%;
+    top: 0;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.button_container {
+    position: absolute;
+    height: 6%;
+    width: 14%;
+    left: 50%;
+    top: 91.5%;
+    transform: translateX(-50%);
+    align-content: center;
+}
+
+.start_matchmaking_button {
+    height: 100%;
+    width: 100%;
+    border: black solid 3px;
+    color: black;
+    border-radius: 30px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.start_matchmaking_button:hover {
+    border-color: #4CAF50;
+}
+
+.start_matchmaking_button:active {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.stop_matchmaking_button {
+    height: 100%;
+    width: 100%;
+    border: none;
+    color: black;
+    border-radius: 30px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background: #4CAF50;
+}
+
+.divTop {
+    height: 6%;
+    width: 100%;
+}
+
+.divMiddle {
+    height: 86.5%;
+    width: 100%;
+    width: 100%;
+}
+
+.divBottom {
+    height: 7.5%;
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.divCancelGameButton {
+    height: 100%;
+    width: 20%;
+    cursor: pointer;
+
+    background: rgba(0, 90, 130, 0.37);
+
+    transition: background-color 0.5s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+    font-size: 1.2vw;
+
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+}
+
+.divCancelGameButton:hover {
+    background: rgba(5, 95, 135, 0.60);
+}
+
+.divStartGameButton {
+    height: 100%;
+    width: 20%;
+    cursor: pointer;
+
+    background: rgba(10, 200, 70, 0.37);
+
+    transition: background-color 0.5s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+    font-size: 1.2vw;
+
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+}
+
+.divStartGameButton:hover {
+    background: rgba(15, 205, 75, 0.60);
+}
+

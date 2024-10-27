@@ -1,0 +1,130 @@
+.container {
+    position: relative;
+    aspect-ratio: 4;
+    width: 100%;
+
+    background-color: rgba(10, 200, 70, 0.37);
+
+    display: flex;
+    flex-direction: row;
+}
+
+.flexShort {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconContainer {
+    height: 75%;
+    width: 75%;
+}
+
+.iconVideo {
+    height: 100%;
+    width: 100%;
+}
+
+.flexLong {
+    flex: 3;
+}
+
+.absoluteWrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.inQueueText {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    font-size: 1dvw;
+
+    font-weight: 600;
+
+    height: 30%;
+    width: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.expectedTimeText {
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+
+    font-size: 0.9dvw;
+
+    height: 30%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.timeInQueueText {
+    position: absolute;
+
+    top: 30%;
+    right: 0;
+
+    font-size: 2dvw;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+
+    height: 40%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.cancelQueueContainer {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 15%;
+    aspect-ratio: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton {
+    cursor: pointer;
+
+    height: 100%;
+    width: 100%;
+
+    box-sizing: content-box;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1dvw auto no-repeat;
+    color: #000;
+    padding: 0;
+    opacity: 0.7;
+    border: 0;
+}
+
+.closeButton:hover {
+    opacity: 1;
+}
+
+.hidden {
+    aspect-ratio: 4;
+    opacity: 0;
+    height: 0;
+
+    transition: height 0.5s, opacity 0.5s;
+}

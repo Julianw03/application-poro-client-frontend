@@ -1,0 +1,63 @@
+.groupHeaderContainer {
+    background-color: #2f2f2fbf;
+
+    font-size: 0.85dvw;
+    font-weight: 600;
+    width: 100%;
+    aspect-ratio: 10;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.longFlex {
+    flex: 3;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.shortFlex {
+    display: flex;
+    flex: 1;
+
+    align-items: center;
+    justify-content: center;
+
+}
+
+.friendsContainer {
+    overflow: hidden;
+    background: #2f2f2f5f;
+}
+
+.nameContainer {
+    flex: 3;
+}
+
+.collapsedFriends {
+    height: 0;
+}
+
+.collapsedArrow {
+    transform: rotate(90deg);
+}
+
+.arrowContainer {
+    padding-right: 0.5dvw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    transition: transform ease-in-out 0.15s;
+}
+
+.arrow {
+    rotate: -90deg;
+    height: 1.5dvw;
+
+    transition: transform 0.10s ease-in-out;
+}

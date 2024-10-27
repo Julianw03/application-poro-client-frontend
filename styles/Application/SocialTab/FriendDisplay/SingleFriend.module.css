@@ -1,0 +1,112 @@
+.profileIconContainer {
+    position: relative;
+    height: 80%;
+    width: 80%;
+
+}
+
+.container {
+    position: relative;
+    aspect-ratio: 4;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.test {
+    height: 35dvh;
+    width: 30dvw;
+}
+
+.dragContainer {
+    aspect-ratio: 4;
+    width: 20dvw;
+
+    border: red solid 1px !important;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.shortFlex {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.longFlex {
+    font-size: 0.8dvw;
+    padding-top: 2%;
+    flex: 3;
+    display: flex;
+
+    flex-direction: column;
+    padding-left: 2%;
+
+    overflow: hidden;
+}
+
+.activityDiv {
+    position: absolute;
+    height: 25%;
+    border-radius: 100%;
+    aspect-ratio: 1;
+
+    left: 80%;
+    top: 80%;
+
+    border: transparent solid 3px;
+
+    transition: border ease-in-out 0.5s;
+
+    overflow: hidden;
+}
+
+.away {
+    background-color: darkred;
+    border-color: red;
+}
+
+.dnd {
+    background-color: dodgerblue;
+    border-color: deepskyblue;
+}
+
+.chat {
+    background-color: darkgreen;
+    border-color: green;
+}
+
+.offline {
+    background-color: darkgrey;
+    border-color: rgb(128, 128, 128);
+}
+
+.profileIcon {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}
+
+.gameNameContainer {
+    flex: 2;
+
+    height: 100%;
+    font-size: 1.0dvw;
+    font-weight: bold;
+    align-items: center;
+}
+
+.activityDescription {
+    display: flex;
+
+    align-items: center;
+    flex: 1.5;
+}
+
+.spacer {
+    flex: 1;
+}

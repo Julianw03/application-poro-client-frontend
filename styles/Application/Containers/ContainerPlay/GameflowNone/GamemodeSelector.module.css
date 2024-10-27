@@ -1,0 +1,33 @@
+.container {
+    height: 100%;
+    width: 100%;
+    padding-top: 3%;
+}
+
+.broadCategorySelectionArea {
+    height: 5%;
+}
+
+
+.subCategorySelectionArea {
+    height: 95%;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.startButton {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cancelButton {
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+    transform: translateX(-50%);
+}

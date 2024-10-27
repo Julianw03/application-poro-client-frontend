@@ -1,0 +1,206 @@
+.headerContainer {
+    width: 100%;
+    aspect-ratio: 8;
+
+    display: flex;
+
+    box-sizing: border-box;
+    background-color: #2f2f2fbf;
+
+}
+
+.headerIconContainer {
+    flex: 1;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.headerIcon {
+    object-fit: contain;
+    height: 80%;
+    width: 80%;
+}
+
+.iconContainer {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    height: 80%;
+    width: 80%;
+}
+
+.headerTextContainer {
+    flex: 3;
+    height: 100%;
+
+    font-weight: bolder;
+    font-size: 1.2dvw;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding-left: 2%;
+}
+
+.invitationContainer {
+    max-height: 25dvh;
+    width: 100%;
+
+    overflow-y: scroll;
+}
+
+.invitationContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.hidden {
+    max-height: 0;
+    transition: max-height 0.5s;
+}
+
+.singleInvitation {
+    display: flex;
+
+    width: 100%;
+    aspect-ratio: 4;
+
+    background-color: #005A825f;
+}
+
+.inviteIconContainer {
+    flex: 4;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.textContainer {
+    flex: 7;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.singleTextLine {
+    flex: 1;
+}
+
+.actionButtons {
+    flex: 5;
+    height: 100%;
+
+    display: flex;
+    overflow: hidden;
+}
+
+.acceptButtonContainer {
+    width: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acceptButton {
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 100000px;
+    outline: none;
+    border: var(--pc-blue4) 4px solid;
+    transition: all 0.15s;
+    background-color: transparent;
+}
+
+.acceptButtonUnavailable {
+    border: var(--pc-grey1dot5) 4px solid;
+}
+
+.acceptButtonUnavailable .acceptIconClass {
+    fill: var(--pc-grey1dot5);
+}
+
+.acceptButton:hover {
+    background-color: #0000005b;
+}
+
+.acceptButton:active {
+    border: var(--pc-blue5) 4px solid;
+    background-color: #0000008b;
+}
+
+.acceptButton:hover .acceptIconClass {
+
+}
+
+.acceptButton:active .acceptIconClass {
+    transform: scale(0.8);
+}
+
+.acceptIconClass {
+    object-fit: contain;
+    height: 90%;
+    width: 90%;
+    transition: transform 0.15s;
+    fill: var(--pc-blue3);
+}
+
+.declineButtonContainer {
+    width: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.declineButton {
+    box-sizing: border-box;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 100000px;
+    outline: none;
+    border: var(--pc-blue4) 3px solid;
+    background-color: transparent;
+}
+
+.declineButton:hover {
+    background-color: #0000005b;
+}
+
+.declineButton:active {
+    border: var(--pc-blue5) 3px solid;
+    background-color: #0000008b;
+}
+
+.declineButton:hover .declineIconClass {
+
+}
+
+.declineButton:active .declineIconClass {
+    transform: scale(0.8);
+}
+
+.declineIconClass {
+    object-fit: contain;
+    aspect-ratio: 1;
+    width: 100%;
+
+    fill: var(--pc-blue3);
+}
+
+.declineIconStrokes {
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke: var(--pc-red1);
+}

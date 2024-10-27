@@ -1,0 +1,160 @@
+.container {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+}
+
+.containerSelectorContainer {
+    position: relative;
+    height: 5%;
+    width: 100%;
+
+}
+
+.collectionWrapper {
+    height: 95%;
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.collectionTransitionTop {
+    position: absolute;
+    height: 5%;
+    width: 100%;
+
+    background: linear-gradient( rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+}
+
+.collectionTransitionBottom {
+    position: absolute;
+    bottom: 0;
+    height: 5%;
+    width: 100%;
+
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+}
+
+.collectionContainer {
+    position: absolute;
+
+    height: 95%;
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.collectionContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.collectionFlexContainer {
+    width: 100%;
+
+    height: fit-content;
+}
+
+
+.entryImageContainer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.entryVideo {
+    position: relative;
+    height: 100%;
+}
+
+.singleChampionSelection {
+}
+
+.singleChampionHeader {
+    width: auto;
+    height: 10%;
+
+    font-family: "Beaufort for LOL";
+    font-weight: 700;
+    font-size: 2em;
+
+    background-color: #181a1b;
+
+    padding-left: 50px;
+    margin-bottom: 0.2%;
+}
+
+.singleChampionSkins {
+    display: flex;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    height: 100%;
+    width: 100%;
+
+    overflow: hidden;
+
+    margin-bottom: 10px;
+}
+
+.singleEntry {
+    flex: 0 1 auto;
+
+    aspect-ratio: 0.55;
+    width: 11.75%;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    user-select: none;
+}
+
+.skinInfoOwned {
+    position: absolute;
+
+    aspect-ratio: 0.55;
+    width: 11.75%;
+    z-index: 1;
+
+    background-color: rgba(0,0,0,0.1);
+}
+
+.skinInfoNotOwned {
+    position: absolute;
+
+    aspect-ratio: 0.55;
+    width: 11.75%;
+    z-index: 1;
+
+    background-color: rgba(0,0,0,0.7);
+}
+
+.skinInfoName {
+    text-align: center;
+    position: absolute;
+    width: 94%;
+    left: 3%;
+    bottom: 5%;
+
+    font-weight: 600;
+    font-size: 1.2em;
+
+}

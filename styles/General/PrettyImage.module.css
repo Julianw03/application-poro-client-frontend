@@ -1,0 +1,15 @@
+.spinner {
+    transform-origin:center;
+    animation:spin .75s infinite linear
+}
+
+@keyframes spin {
+    100%{transform:rotate(360deg)}
+}
+
+.spinnerSvg {
+    width: 100%;
+    height: 100%;
+    fill: #fff;
+    stroke-width: 1;
+}

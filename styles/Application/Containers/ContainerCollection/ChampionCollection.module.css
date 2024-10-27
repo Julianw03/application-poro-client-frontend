@@ -1,0 +1,165 @@
+.championContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    overflow-y: scroll;
+
+}
+
+.championContainer::-webkit-scrollbar {
+    background: transparent;
+    width: 0px;
+}
+
+.championContainer::-webkit-scrollbar-thumb {
+    background: #C8AA6E;
+    border-radius: 100px;
+    height: 5px;
+}
+
+.championContainer::-webkit-scrollbar:hover {
+    width: 20px;
+}
+
+.championCard {
+    height: 60%;
+    margin: 0.25vw;
+
+    overflow: hidden;
+}
+
+.filler {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.championImageContainer {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.coverImage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    user-select: none;
+
+    object-position: 50% 50%;
+
+    scale: 1.075;
+
+    transition: ease-in-out 0.25s;
+}
+
+.unownedImage {
+    filter: grayscale(100%);
+    transition: ease-in-out 0.25s;
+}
+.containImage {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    user-select: none;
+
+    transition: ease-in-out 0.25s;
+}
+
+.championCard:hover .coverImage {
+    scale: 1.125;
+    transition: cubic-bezier(0,0,0,1) 0.25s;
+}
+
+.championCard:hover .hiddenChampionNameContainer {
+    display: none;
+}
+
+.championCard:hover .championInfoContainer {
+    transform: translateY(-100%);
+    transition: ease-in-out 0.25s;
+}
+
+.championCard:hover .championNameContainer {
+    display: block;
+}
+
+.championCard:hover .unownedImage {
+    filter: grayscale(0%);
+}
+
+.championInfoContainer {
+    user-select: none;
+    position: relative;
+    width: 100%;
+    height: 101%;
+
+    transform: translateY(-0.0%);
+    transition: ease-in-out 0.25s;
+
+    background-image: linear-gradient(transparent 60%, #131516DF 80%);
+}
+
+.hiddenChampionNameContainer {
+    position: absolute;
+    opacity: 0;
+    top: -50%;
+    width: 100%;
+    text-align: center;
+    height: 10%;
+}
+
+.championNameContainer {
+    user-select: none;
+    font-family: "Beaufort for LOL";
+    font-weight: 600;
+    font-size: 1.2em;
+
+    position: absolute;
+    top: 65%;
+    left: 10%;
+    width: 80%;
+
+    display: none;
+
+
+    text-align: center;
+}
+
+.championRolesContainer {
+    position: absolute;
+    bottom: 2%;
+    height: 20%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.roleContainer {
+    height: 100%;
+    overflow: hidden;
+
+    margin-left: 3%;
+    margin-right: 3%;
+
+}
+
+.unownedContainer {
+    user-select: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    backdrop-filter: grayscale(100%);
+    transform: translateY(-100%);
+
+}
