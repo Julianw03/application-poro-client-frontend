@@ -196,7 +196,7 @@ export default function QueueDisplay() {
                                 Low Priority Queue
                             </div>
                             <div className={styles.timeInQueueText}>
-                                {renderQueueSecondsPretty(matchmakingState?.lowPriorityData?.penaltyTime - matchmakingState?.lowPriorityData?.penaltyTimeRemaining ?? 0)}
+                                {renderQueueSecondsPretty(matchmakingState?.lowPriorityData?.penaltyTime - matchmakingState?.lowPriorityData?.penaltyTimeRemaining)}
                             </div>
                             <div className={styles.expectedTimeText}>
                                 Penalty Time&nbsp;

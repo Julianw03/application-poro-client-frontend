@@ -23,7 +23,7 @@ import {
     PresenceState,
     PUUID,
     Queue, RegaliaJsonData,
-    RemoteMapAssets, SingleChallengeUpdate,
+    RemoteMapAssets,
     Skin, SUMMONER_ID,
     SummonerSpell,
     SummonerSpellState,
@@ -572,7 +572,7 @@ const friendGroupReducer = createReducer(
                 (state, action) => {
                     const newState: Record<number, FriendGroup> = {...state};
                     const updateData = action.payload;
-                    newState[updateData.key] = updateData.group;
+                    newState[updateData.id] = updateData.group;
                     return newState;
                 }
             )
@@ -834,7 +834,7 @@ const genericPresenceReducer = createReducer(
                         'Updating ' + newData?.id + ': ',
                         newData
                     );
-                    newState[newData.id] = newData.friend;
+                    newState[newData.id] = newData.data;
                     return newState;
                 }
             )
