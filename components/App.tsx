@@ -3,7 +3,8 @@ import axios from 'axios';
 import styles from '../styles/App.module.css';
 import * as Globals from '../Globals';
 import {
-    ACTION_RESET_CHALLENGE_DATA, ACTION_RESET_CHALLENGE_SUMMARY,
+    ACTION_RESET_CHALLENGE_DATA,
+    ACTION_RESET_CHALLENGE_SUMMARY,
     ACTION_RESET_CHAMP_SELECT_STATE,
     ACTION_RESET_CHAMPIONS,
     ACTION_RESET_CURRENT_SUMMONER,
@@ -13,11 +14,15 @@ import {
     ACTION_RESET_INVITATIONS,
     ACTION_RESET_LOBBY_STATE,
     ACTION_RESET_LOOT_STATE,
-    ACTION_RESET_PATCHER_STATE, ACTION_RESET_QUEUES, ACTION_RESET_REGALIA,
+    ACTION_RESET_PATCHER_STATE,
+    ACTION_RESET_QUEUES,
+    ACTION_RESET_USER_REGALIA,
     ACTION_RESET_SELF_PRESENCE,
-    ACTION_RESET_SUMMONER_SPELLS, ACTION_RESET_TICKER_MESSAGES,
+    ACTION_RESET_SUMMONER_SPELLS,
+    ACTION_RESET_TICKER_MESSAGES,
     ACTION_SET_ALL_DATA_LOADED,
-    ACTION_SET_CHALLENGE_DATA, ACTION_SET_CHALLENGE_SUMMARY,
+    ACTION_SET_CHALLENGE_DATA,
+    ACTION_SET_CHALLENGE_SUMMARY,
     ACTION_SET_CHAMP_SELECT_STATE,
     ACTION_SET_CHAMPIONS,
     ACTION_SET_CHROMA_TO_PARENT_SKIN,
@@ -35,25 +40,38 @@ import {
     ACTION_SET_OWNED_CHAMPIONS,
     ACTION_SET_OWNED_SKINS,
     ACTION_SET_PATCHER_STATE,
-    ACTION_SET_QUEUES, ACTION_SET_QUEUES_TYPE_TO_ID,
-    ACTION_SET_REGALIA,
-    ACTION_SET_SELF_PRESENCE, ACTION_SET_SINGLE_QUEUE, ACTION_SET_SINGLE_QUEUE_TYPE_TO_ID, ACTION_SET_SINGLE_REGALIA,
+    ACTION_SET_PRESENCE,
+    ACTION_SET_QUEUES,
+    ACTION_SET_QUEUES_TYPE_TO_ID,
+    ACTION_SET_USER_REGALIA,
+    ACTION_SET_SELF_PRESENCE,
+    ACTION_SET_SINGLE_QUEUE,
+    ACTION_SET_SINGLE_QUEUE_TYPE_TO_ID,
+    ACTION_SET_SINGLE_USER_REGALIA,
     ACTION_SET_SKINS,
     ACTION_SET_SKINS_BY_CHAMPION,
     ACTION_SET_SUMMONER_SPELLS,
-    ACTION_SET_TICKER_MESSAGES, ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE, ACTION_UPDATE_FRIEND_GROUPS_SINGLE,
-    ACTION_UPDATE_FRIEND_SINGLE, ACTION_UPDATE_PRESENCE_SINGLE,
-    AppState, ChallengeSummaryUpdateData, FriendGroupUpdateData, FriendUpdateData, QueueUpdateData, RegaliaUpdateData
+    ACTION_SET_TICKER_MESSAGES,
+    ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE,
+    ACTION_UPDATE_FRIEND_GROUPS_SINGLE,
+    ACTION_UPDATE_FRIEND_SINGLE,
+    ACTION_UPDATE_PRESENCE_SINGLE,
+    AppState,
+    FriendGroupUpdateData,
+    FriendUpdateData,
+    QueueUpdateData,
+    RegaliaUpdateData,
+    ACTION_SET_REGALIA
 } from '../store';
 import {
-    ChallengeData, ChallengeSummary, ChallengeSummaryState,
+    ChallengeData, ChallengeSummary, ChallengeSummaryState, ChallengeSummaryUpdate,
     ChampionState,
     ChampSelectState,
     CurrentSummonerState,
     EOGHonorState,
     Friend,
     FriendGroup,
-    GameflowState, ID,
+    GameflowState, GenericPresenceState, GenericPresenceUpdate, ID,
     InternalState,
     Invitation,
     LobbyState,
@@ -69,7 +87,7 @@ import {
     RemoteMapAssets,
     Skin,
     SummonerSpell,
-    TickerMessage
+    TickerMessage, UserRegaliaMap, UserRegaliaUpdate
 } from '../types/Store';
 import {useEffect, useState} from 'react';
 import DynamicBackground from '../components/DynamicBackground';
@@ -181,7 +199,7 @@ export default function App() {
         dispatch(ACTION_RESET_CHAMP_SELECT_STATE());
         dispatch(ACTION_RESET_CHAMPIONS());
         dispatch(ACTION_RESET_SUMMONER_SPELLS());
-        dispatch(ACTION_RESET_REGALIA());
+        dispatch(ACTION_RESET_USER_REGALIA());
         dispatch(ACTION_RESET_CHALLENGE_DATA());
         dispatch(ACTION_RESET_CURRENT_SUMMONER());
         dispatch(ACTION_RESET_SELF_PRESENCE());
@@ -234,17 +252,17 @@ export default function App() {
                         )
                     );
                     break;
-                case Globals.UPDATES.REGALIA_UPDATE:
+                case Globals.UPDATES.USER_REGALIA_UPDATE:
                     dispatch(
-                        ACTION_SET_REGALIA(
-                            message.data as RegaliaJsonData
+                        ACTION_SET_USER_REGALIA(
+                            message.data as UserRegaliaMap
                         )
                     );
                     break;
-                case Globals.UPDATES.SINGLE_REGALIA_UPDATE:
+                case Globals.UPDATES.SINGLE_USER_REGALIA_UPDATE:
                     dispatch(
-                        ACTION_SET_SINGLE_REGALIA(
-                            message as unknown as RegaliaUpdateData
+                        ACTION_SET_SINGLE_USER_REGALIA(
+                            message as unknown as UserRegaliaUpdate
                         )
                     );
                     break;
@@ -378,16 +396,22 @@ export default function App() {
                     break;
                 case Globals.UPDATES.FRIEND_HOVERCARD_UPDATE:
                     break;
+                case Globals.UPDATES.INITIAL_GENERIC_PRESENCE_UPDATE:
+                    const presenceState = message.data as GenericPresenceState
+                    dispatch(
+                        ACTION_SET_PRESENCE(
+                            presenceState
+                        )
+                    );
+                    break;
                 case Globals.UPDATES.GENERIC_PRESENCE_UPDATE:
                     // eslint-disable-next-line no-case-declarations
-                    const updatedPresence = message as unknown as FriendUpdateData;
+                    const updatedPresence = message as unknown as GenericPresenceUpdate;
                     dispatch(
                         ACTION_UPDATE_PRESENCE_SINGLE(
                             updatedPresence
                         )
                     );
-                    break;
-                case Globals.UPDATES.INITIAL_GENERIC_PRESENCE_UPDATE:
                     break;
                 case Globals.UPDATES.OWNED_SKINS_UPDATE:
                     // eslint-disable-next-line no-case-declarations
@@ -414,7 +438,8 @@ export default function App() {
                     );
                     break;
                 case Globals.UPDATES.CHALLENGE_SUMMARY_UPDATE:
-                    const challengeUpdate = message.data as ChallengeSummaryUpdateData;
+                    const challengeUpdate = message as unknown as ChallengeSummaryUpdate;
+                    console.log(challengeUpdate);
                     dispatch(
                         ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE(
                             challengeUpdate

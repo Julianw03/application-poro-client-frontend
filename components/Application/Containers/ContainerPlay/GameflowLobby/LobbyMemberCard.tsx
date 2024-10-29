@@ -1,4 +1,4 @@
-import {LobbyMember, UserRegalia} from '../../../../../types/Store';
+import {ChallengeSummary, LobbyMember, UserRegalia} from '../../../../../types/Store';
 import styles
     from '../../../../../styles/Application/Containers/ContainerPlay/GameflowLobby/LobbyMemberCard.module.css';
 import * as Globals from '../../../../../Globals';
@@ -9,6 +9,7 @@ import {JSX, RefAttributes} from 'react';
 import PrettyImage from '../../../../General/PrettyImage';
 import {useSelector} from 'react-redux';
 import {AppState} from '../../../../../store';
+import axios from 'axios';
 
 export interface LobbyMemberCardProps {
     member: LobbyMember | Record<string, never>;
@@ -16,9 +17,12 @@ export interface LobbyMemberCardProps {
 
 export default function LobbyMemberCard(props: LobbyMemberCardProps) {
 
-    const regaliaMap = useSelector((state: AppState) => state.regalia);
+    const regaliaMap = useSelector((state: AppState) => state.userRegalia);
+    const challengeSummary = useSelector((state: AppState) => state.challengeSummary);
 
     const member = props.member;
+    const regaliaEntry = regaliaMap?.[member?.summonerId ?? ''];
+    const challengeEntry = challengeSummary?.[member?.puuid ?? ''];
 
     const getPositionIconUrl = (position: string) => {
         return Globals.STATIC_PREFIX + '/assets/svg/positions/' + position.toLowerCase() + '.svg';
@@ -39,6 +43,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         if (member === undefined || member === null || member.summonerId === undefined) {
             return undefined;
         }
+
         return regaliaMap[member.summonerId];
     };
 
@@ -87,10 +92,11 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return (
             <div className={styles.rankedAnimatedContainer}>
                 <video draggable={false} className={`${styles.rankedVideo} ${styles.noDrag}`}
-                    src={getWingsUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} autoPlay={true} controls={false}
+                    src={getWingsUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} autoPlay={true}
+                    controls={false}
                     muted={true} loop={true}/>
                 <img draggable={false} className={`${styles.rankedImage} ${styles.noDrag}`}
-                    src={getPlateUrl( getRegaliaForMember(member)?.highestRankedEntry.tier)} alt={''}/>
+                    src={getPlateUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} alt={''}/>
             </div>
         );
     };
@@ -99,7 +105,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return (
             <>
                 <img className={styles.prestigeImage} draggable={false}
-                    src={getPrestigeRegaliaUrl( getRegaliaForMember(member)?.selectedPrestigeCrest)} alt={''}/>
+                    src={getPrestigeRegaliaUrl(getRegaliaForMember(member)?.selectedPrestigeCrest)} alt={''}/>
             </>
         );
     };
@@ -114,17 +120,52 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         );
     };
 
-    const renderRegalia = () => {
-        const renderedRegalia = getRegaliaForMember(member)?.crestType === 'ranked' ? renderRankedRegalia() : renderNormalRegalia();
+    const renderRegalia = (regalia: UserRegalia | undefined) => {
+
+        if (regalia === undefined) {
+            console.log(regaliaMap);
+            axios.get(Globals.REST_V1_PREFIX + '/managers/map/com.iambadatplaying.data.map.RegaliaManager/' + member.summonerId)
+                .then((response) => {})
+                .catch((error) => {});
+            return (<></>);
+        }
+
         return (
             <div className={styles.profileContainer}>
                 <img draggable={false} className={`${styles.profileImage} ${styles.noDrag}`}
-                    src={Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/profile-icons/' + getRegaliaForMember(member)?.profileIconId + '.jpg'}
+                    src={Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/profile-icons/' + regalia?.profileIconId + '.jpg'}
                     alt={''}/>
-                {renderedRegalia}
+                {regalia?.crestType === 'ranked' ? renderRankedRegalia() : renderNormalRegalia()}
+                {
+                    renderChallengeIndicator(challengeEntry)
+                }
             </div>
         );
 
+    };
+
+    const renderChallengeIndicator = (challengeEntry: ChallengeSummary | undefined) => {
+        if (challengeEntry === undefined || challengeEntry === null) {
+            console.log(challengeSummary);
+            axios.get(Globals.REST_V1_PREFIX + '/managers/map/com.iambadatplaying.data.map.ChallengeSummaryDataManager/' + member.puuid)
+                .then((response) => {})
+                .catch((error) => {});
+            return (<></>);
+        }
+
+        const crystalLevel = challengeEntry.overallChallengeLevel;
+        console.log(
+            'Crystal level: ',
+            crystalLevel,
+            Globals.STATIC_PREFIX + '/assets/png/challenges/crystals/' + crystalLevel.toLowerCase() + '.png'
+        );
+        return (
+            <div className={styles.crystalContainer}>
+                <PrettyImage imgProps={{
+                    src: Globals.STATIC_PREFIX + '/assets/png/challenges/crystals/' + crystalLevel.toLowerCase() + '.png'
+                }} useLoader={false} className={`${styles.crystalImage} ${styles.noDrag}`}/>
+            </div>
+        );
     };
 
     const renderMember = () => {
@@ -133,20 +174,25 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
             <div>
                 {/*Banner*/}
                 {/*Regalia*/}
-                {renderRegalia()}
+                {renderRegalia(regaliaEntry)}
                 {/*Name*/}
                 <ClickableText text={member?.gameName + '#' + member?.gameTag}>
                     <div className={styles.displayName}>
                         {member?.gameName}
                     </div>
                 </ClickableText>
+                <div className={styles.displayPlayerTitle}>
+                    {
+                        challengeEntry?.title?.name
+                    }
+                </div>
                 {renderPositionIcons()}
             </div>
         );
     };
 
     const renderCard = () => {
-        const summonerId = member?.summonerId
+        const summonerId = member?.summonerId;
 
         //Assume no member is present, return empty card
         if (summonerId === null || summonerId === undefined) {
