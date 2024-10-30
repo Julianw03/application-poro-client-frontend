@@ -1,4 +1,4 @@
-import {ChallengeSummary, LobbyMember, UserRegalia} from '../../../../../types/Store';
+import {ChallengeSummary, LevelMapping, LobbyMember, UserRegalia} from '../../../../../types/Store';
 import styles
     from '../../../../../styles/Application/Containers/ContainerPlay/GameflowLobby/LobbyMemberCard.module.css';
 import * as Globals from '../../../../../Globals';
@@ -20,9 +20,13 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
     const regaliaMap = useSelector((state: AppState) => state.userRegalia);
     const challengeSummary = useSelector((state: AppState) => state.challengeSummary);
 
+    const challengeData = useSelector((state: AppState) => state.challengeData);
+
     const member = props.member;
     const regaliaEntry = regaliaMap?.[member?.summonerId ?? ''];
     const challengeEntry = challengeSummary?.[member?.puuid ?? ''];
+
+    const DEFAULT_EMPTY_TOKEN_URL = Globals.STATIC_PREFIX + '/assets/png/challenges/background.png';
 
     const getPositionIconUrl = (position: string) => {
         return Globals.STATIC_PREFIX + '/assets/svg/positions/' + position.toLowerCase() + '.svg';
@@ -125,8 +129,10 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         if (regalia === undefined) {
             console.log(regaliaMap);
             axios.get(Globals.REST_V1_PREFIX + '/managers/map/com.iambadatplaying.data.map.RegaliaManager/' + member.summonerId)
-                .then((response) => {})
-                .catch((error) => {});
+                .then((response) => {
+                })
+                .catch((error) => {
+                });
             return (<></>);
         }
 
@@ -148,8 +154,10 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         if (challengeEntry === undefined || challengeEntry === null) {
             console.log(challengeSummary);
             axios.get(Globals.REST_V1_PREFIX + '/managers/map/com.iambadatplaying.data.map.ChallengeSummaryDataManager/' + member.puuid)
-                .then((response) => {})
-                .catch((error) => {});
+                .then((response) => {
+                })
+                .catch((error) => {
+                });
             return (<></>);
         }
 
@@ -170,6 +178,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
 
     const renderMember = () => {
         const member = props.member;
+
         return (
             <div>
                 {/*Banner*/}
@@ -186,9 +195,35 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
                         challengeEntry?.title?.name
                     }
                 </div>
+                <div className={styles.displayPlayerTokens}>
+                    {
+                        challengeEntry?.topChallenges?.map((challenge, i) => {
+                            return (
+                                <div className={styles.singleToken} key={i}>
+                                    <PrettyImage imgProps={{
+                                        src: getIconUrl(challenge?.id, challenge?.currentLevel)
+                                    }} useLoader={false} className={styles.tokenImage}/>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
                 {renderPositionIcons()}
             </div>
         );
+    };
+
+    const getIconUrl = (id: number | undefined, currentLevel: string | undefined) => {
+        if (id === undefined || currentLevel === undefined) {
+            return DEFAULT_EMPTY_TOKEN_URL;
+        }
+        const challenge = challengeData?.challenges[id];
+        if (challenge === undefined) {
+            return DEFAULT_EMPTY_TOKEN_URL;
+        }
+
+        const urlForLevel = challenge.levelToIconPath[currentLevel.toUpperCase()];
+        return urlForLevel ? Globals.PROXY_PREFIX + urlForLevel : DEFAULT_EMPTY_TOKEN_URL;
     };
 
     const renderCard = () => {
@@ -206,7 +241,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
     };
 
     return (
-        <div className={styles.lobbyMemberCard}>
+        <div className={Globals.applyMultipleStyles(styles.lobbyMemberCard)}>
             {
                 renderCard()
             }

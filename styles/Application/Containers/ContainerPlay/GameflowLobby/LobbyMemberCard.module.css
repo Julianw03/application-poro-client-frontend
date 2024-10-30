@@ -65,6 +65,41 @@
     top: 55%;
 }
 
+.displayPlayerTokens {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: row;
+
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    left: 20%;
+    aspect-ratio: 2.5;
+    top: 65%;
+    column-gap: 7.5%;
+}
+
+.singleToken {
+    flex: 1;
+    height: 80%;
+    aspect-ratio: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tokenImage {
+    height: 100%;
+    width: 100%;
+
+    object-fit: contain;
+    user-select: none;
+}
+
 .leaderCrownContainer {
     position: absolute;
     margin: 0;

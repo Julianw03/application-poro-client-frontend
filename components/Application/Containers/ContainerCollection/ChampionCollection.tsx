@@ -79,7 +79,7 @@ export default function ChampionCollection() {
                         }} key={champion.id}>
                             <div className={styles.championImageContainer + ' ' + getClass(championId)}>
                                 <PrettyImage imgProps={{
-                                    src: `${Globals.PROXY_STATIC_PREFIX}${skins[skinId]?.loadScreenPath}`,
+                                    src: `${Globals.PROXY_STATIC_PREFIX}${skins?.[skinId]?.loadScreenPath}`,
                                     loading: 'lazy'
                                 }}
                                 useLoader={true}

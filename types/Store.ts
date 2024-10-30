@@ -1072,6 +1072,7 @@ export interface TopChallenge {
 export interface ChallengeSummary {
     apexLadderUpdateTime: number,
     apexLeaderboardPosition: number,
+    bannerId: string,
     categoryProgress: CategoryProgress[],
     crestId: string,
     isApex: boolean,
