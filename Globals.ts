@@ -34,7 +34,7 @@ export const REST_V1_PREFIX: string = BASE_URL + '/rest/v1';
 
 export const WEBSOCKET_URL: string = `ws://127.0.0.1:${APPLICATION_PORT}/ws/`;
 
-export const GITHUB_ISSUES_URL: string = 'https://github.com/IAmBadAtPlaying/poro-client/issues';
+export const GITHUB_ISSUES_URL: string = 'https://github.com/Julianw03/application-poro-client-frontend/issues';
 
 //=================================== REST URL ===================================
 export const FETCH_BACKEND_STATUS_URL: string = REST_V1_PREFIX + '/status';
