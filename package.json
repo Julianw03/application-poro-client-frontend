@@ -6,7 +6,6 @@
     "dev": "cross-env IS_DEV=true DO_EXPORT=false next dev",
     "build": "cross-env IS_DEV=false DO_EXPORT=true next build",
     "start": "cross-env IS_DEV=false DO_EXPORT=false next start",
-    "build-workers": "tsc && for /r %f in (./workers/*.ts) do ren \"%f\" \"%%~nf.js\"",
     "lint": "next lint"
   },
   "dependencies": {
