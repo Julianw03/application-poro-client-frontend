@@ -3,10 +3,11 @@ import styles from '../../styles/General/ClickableText.module.css';
 
 interface CopyToClipboardProps {
     text: string;
+    className?: string;
     children: React.ReactNode;
 }
 
-const CopyToClipboard: React.FC<CopyToClipboardProps> = ({text, children}) => {
+const CopyToClipboard: React.FC<CopyToClipboardProps> = ({text, className, children}) => {
     const copyToClipboard = () => {
         navigator.clipboard.writeText(text).then(() => {
 
@@ -21,7 +22,7 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({text, children}) => {
     return (
         <div onClick={() => {
             copyToClipboard();
-        }} className={styles.body}>
+        }} className={className ?? styles.body}>
             {children}
         </div>
     );

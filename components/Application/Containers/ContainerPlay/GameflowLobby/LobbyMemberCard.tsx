@@ -185,10 +185,8 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
                 {/*Regalia*/}
                 {renderRegalia(regaliaEntry)}
                 {/*Name*/}
-                <ClickableText text={member?.gameName + '#' + member?.gameTag}>
-                    <div className={styles.displayName}>
-                        {member?.gameName}
-                    </div>
+                <ClickableText text={member?.gameName + '#' + member?.gameTag} className={styles.displayName}>
+                    {member?.gameName}
                 </ClickableText>
                 <div className={styles.displayPlayerTitle}>
                     {
