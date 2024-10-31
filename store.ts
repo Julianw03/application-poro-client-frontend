@@ -1,7 +1,7 @@
 import {configureStore, createAction, createReducer} from '@reduxjs/toolkit';
 import {
     ActiveContainerState,
-    ChallengeData, ChallengeSummaryState,
+    ChallengeData, ChallengeSummaryState, ChallengeSummaryUpdate,
     ChampionState,
     ChampSelectState,
     ContainerState,
@@ -9,8 +9,8 @@ import {
     EOGHonorState,
     Friend,
     FriendGroup,
-    GameflowState,
-    GenericPresenceState, ID,
+    GameflowState, GenericPresence,
+    GenericPresenceState, GenericPresenceUpdate, ID,
     InternalState,
     Invitation,
     LobbyState,
@@ -27,7 +27,7 @@ import {
     Skin, SUMMONER_ID,
     SummonerSpell,
     SummonerSpellState,
-    TickerMessage, UserRegalia, UserRegaliaMap,
+    TickerMessage, UserRegalia, UserRegaliaMap, UserRegaliaUpdate,
     WindowFocusState
 } from './types/Store';
 import * as Globals from './Globals';
@@ -37,7 +37,7 @@ export interface AppState {
     //========= STATIC =========
     mapAssets: MapAssets | Record<string, never>,
     summonerSpells: SummonerSpellState | null,
-    regalia: UserRegaliaMap | null,
+    regalia: RegaliaJsonData | null,
     skins: Record<number, Skin>
     queues: Record<number, Queue>
     queueTypeToId: Record<string, number>
@@ -64,6 +64,7 @@ export interface AppState {
     honorEOGState: EOGHonorState | null,
     champSelectState: ChampSelectState | null,
     challengeSummary: ChallengeSummaryState | null,
+    userRegalia: UserRegaliaMap | null,
 
     genericPresence: GenericPresenceState | null,
 
@@ -93,11 +94,6 @@ export interface FriendGroupUpdateData {
 export interface QueueUpdateData {
     id: number,
     queue: Queue
-}
-
-export interface ChallengeSummaryUpdateData {
-    puuid: PUUID,
-    challengeSummary: ChallengeSummaryState
 }
 
 export interface RegaliaUpdateData {
@@ -137,6 +133,8 @@ const INITIAL_LOOT_STATE = null;
 
 const INITIAL_INVITATIONS = null;
 
+const INITIAL_USER_REGALIA = null;
+
 const INITIAL_TICKER_MESSAGES = null;
 
 const INITIAL_HONOR_EOG_STATE = null;
@@ -163,10 +161,6 @@ export const ACTION_RESET_MAP_ASSETS = createAction('mapAssets/reset');
 export const ACTION_SET_SUMMONER_SPELLS = createAction<SummonerSpellState>('summonerSpells/set');
 export const ACTION_RESET_SUMMONER_SPELLS = createAction('summonerSpells/reset');
 
-export const ACTION_SET_REGALIA = createAction<RegaliaJsonData>('regalia/set');
-export const ACTION_SET_SINGLE_REGALIA = createAction<RegaliaUpdateData>('regalia/setSingle');
-export const ACTION_RESET_REGALIA = createAction('regalia/reset');
-
 export const ACTION_SET_SKINS = createAction<Record<number, Skin>>('skins/set');
 export const ACTION_RESET_SKINS = createAction('skins/reset');
 
@@ -177,6 +171,9 @@ export const ACTION_RESET_QUEUES = createAction('queues/reset');
 export const ACTION_SET_QUEUES_TYPE_TO_ID = createAction<Record<number, Queue>>('queueTypeToId/set');
 export const ACTION_SET_SINGLE_QUEUE_TYPE_TO_ID = createAction<QueueUpdateData>('queueTypeToId/setSingle');
 export const ACTION_RESET_QUEUES_TYPE_TO_ID = createAction('queueTypeToId/reset');
+
+export const ACTION_SET_REGALIA = createAction<RegaliaJsonData>('regalia/set');
+export const ACTION_RESET_REGALIA = createAction('regalia/reset');
 
 export const ACTION_SET_CHAMPIONS = createAction<ChampionState>('champions/set');
 export const ACTION_RESET_CHAMPIONS = createAction('champions/reset');
@@ -239,13 +236,17 @@ export const ACTION_RESET_MATCHMAKING_SEARCH_STATE = createAction('matchmakingSe
 export const ACTION_SET_CHAMP_SELECT_STATE = createAction<ChampSelectState>('champSelectState/set');
 export const ACTION_RESET_CHAMP_SELECT_STATE = createAction('champSelectState/reset');
 
-export const ACTION_SET_PRESENCE = createAction<PresenceState>('genericPresenceUpdate/set');
-export const ACTION_UPDATE_PRESENCE_SINGLE = createAction<FriendUpdateData>('genericPresenceUpdate/update');
+export const ACTION_SET_PRESENCE = createAction<GenericPresenceState>('genericPresenceUpdate/set');
+export const ACTION_UPDATE_PRESENCE_SINGLE = createAction<GenericPresenceUpdate>('genericPresenceUpdate/update');
 export const ACTION_RESET_PRESENCE = createAction('genericPresence/reset');
 
 export const ACTION_SET_CHALLENGE_SUMMARY = createAction<ChallengeSummaryState>('challengeSummary/set');
-export const ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE = createAction<ChallengeSummaryUpdateData>('challengeSummary/update');
+export const ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE = createAction<ChallengeSummaryUpdate>('challengeSummary/update');
 export const ACTION_RESET_CHALLENGE_SUMMARY = createAction('challengeSummary/reset');
+
+export const ACTION_SET_USER_REGALIA = createAction<UserRegaliaMap>('userRegalia/set');
+export const ACTION_SET_SINGLE_USER_REGALIA = createAction<UserRegaliaUpdate>('userRegalia/setSingle');
+export const ACTION_RESET_USER_REGALIA = createAction('userRegalia/reset');
 
 export const ACTION_SET_WINDOW_FOCUSED = createAction<WindowFocusState>('windowFocused/set');
 export const ACTION_SET_ACTIVE_CONTAINER = createAction<ContainerState>('activeContainer/set');
@@ -289,7 +290,7 @@ const summonerSpellsReducer = createReducer(
     }
 );
 
-const regaliaStateReducer = createReducer(
+const regaliaReducer = createReducer(
     INITIAL_REGALIA_STATE,
     (builder) => {
         builder
@@ -300,7 +301,29 @@ const regaliaStateReducer = createReducer(
                 }
             )
             .addCase(
-                ACTION_SET_SINGLE_REGALIA,
+                ACTION_RESET_REGALIA,
+                (state, action) => {
+                    return null;
+                }
+            )
+            .addDefaultCase(
+                (state, action) => {}
+            );
+    }
+);
+
+const userRegaliaStateReducer = createReducer(
+    INITIAL_USER_REGALIA,
+    (builder) => {
+        builder
+            .addCase(
+                ACTION_SET_USER_REGALIA,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            .addCase(
+                ACTION_SET_SINGLE_USER_REGALIA,
                 (state, action) => {
                     const newData = action.payload;
                     const newState = {...state};
@@ -309,7 +332,7 @@ const regaliaStateReducer = createReducer(
                 }
             )
             .addCase(
-                ACTION_RESET_REGALIA,
+                ACTION_RESET_USER_REGALIA,
                 (state, action) => {
                     return null;
                 }
@@ -828,12 +851,8 @@ const genericPresenceReducer = createReducer(
             .addCase(
                 ACTION_UPDATE_PRESENCE_SINGLE,
                 (state, action) => {
-                    const newState: Record<string, Friend> = {...state};
-                    const newData = action.payload as FriendUpdateData;
-                    console.log(
-                        'Updating ' + newData?.id + ': ',
-                        newData
-                    );
+                    const newState: Record<PUUID, GenericPresence> = {...state};
+                    const newData = action.payload;
                     newState[newData.id] = newData.data;
                     return newState;
                 }
@@ -864,8 +883,8 @@ const challengeSummaryReducer = createReducer(
                 ACTION_UPDATE_CHALLENGE_SUMMARY_SINGLE,
                 (state, action) => {
                     const newState = {...state};
-                    const challenge = action.payload;
-                    newState[challenge.puuid] = challenge.challengeSummary;
+                    const updateData = action.payload;
+                    newState[updateData.id] = updateData.data;
                     return newState;
                 }
             )
@@ -873,11 +892,6 @@ const challengeSummaryReducer = createReducer(
                 ACTION_RESET_CHALLENGE_SUMMARY,
                 (state, action) => {
                     return null;
-                }
-            )
-            .addDefaultCase(
-                (state, action) => {
-                    return state;
                 }
             );
     }
@@ -937,7 +951,7 @@ export const store = configureStore({
     reducer: {
         mapAssets: mapAssetsReducer,
         summonerSpells: summonerSpellsReducer,
-        regalia: regaliaStateReducer,
+        regalia: regaliaReducer,
         skins: skinsReducer,
         queues: queueReducer,
         queueTypeToId: queueTypeToIdReducer,
@@ -965,6 +979,7 @@ export const store = configureStore({
         matchmakingSearchState: matchmakingSearchStateReducer,
         honorEOGState: honorEOGReducer,
         challengeSummary: challengeSummaryReducer,
+        userRegalia: userRegaliaStateReducer,
 
         genericPresence: genericPresenceReducer,
 

@@ -84,8 +84,8 @@ export interface LolPresence {
     championId: number,
     companionId: string,
     damageSkinId: number,
-    gameId: number,
-    gameMode: string,
+    gameId?: number,
+    gameMode?: string,
     gameQueueType: string,
     gameStatus: string,
     iconOverride: IconOverride,
@@ -94,8 +94,8 @@ export interface LolPresence {
     level: string,
     mapId: string,
     mapSkinId: string,
-    masteryScore: string,
-    playerTitleSelected: string
+    masteryScore?: string,
+    playerTitleSelected?: string
     profileIcon: string,
     pty?: {
         maxPlayers: number,
@@ -112,14 +112,10 @@ export interface LolPresence {
     rankedPrevSeasonTier: string,
     rankedSplitRewardLevel: string,
     rankedWins: string,
-    regalia: {
-        bannerType: number,
-        crestType: number,
-        selectedPrestigeCrest: number
-    }
+    regalia: UserRegalia,
     skinVariant: string,
     skinname: string,
-    timeStamp: string,
+    timeStamp?: string,
 }
 
 export enum IconOverride {
@@ -255,9 +251,15 @@ export interface GenericPresence {
     name: string,
     pid: string,
     puuid: PUUID,
-    regalia: object,
     statusMessage: string,
     summonerId: number,
+}
+
+export interface GenericPresenceState extends Record<ID, GenericPresence> {}
+
+export interface GenericPresenceUpdate {
+    id: PUUID,
+    data: GenericPresence
 }
 
 //======================== REGALIA ========================
@@ -281,7 +283,12 @@ export interface Regalia {
 }
 
 //User Regalia
-export interface UserRegaliaMap extends Record<string, UserRegalia> {}
+export interface UserRegaliaMap extends Record<PUUID, UserRegalia> {}
+
+export interface UserRegaliaUpdate {
+    id: PUUID,
+    data: UserRegalia
+}
 
 export interface UserRegalia {
     bannerType: string,
@@ -1065,6 +1072,7 @@ export interface TopChallenge {
 export interface ChallengeSummary {
     apexLadderUpdateTime: number,
     apexLeaderboardPosition: number,
+    bannerId: string,
     categoryProgress: CategoryProgress[],
     crestId: string,
     isApex: boolean,
@@ -1076,6 +1084,11 @@ export interface ChallengeSummary {
     title: ChallengeTitle
     topChallenges: [TopChallenge, TopChallenge, TopChallenge]
     totalChallengeScore: number
+}
+
+export interface ChallengeSummaryUpdate {
+    id: PUUID,
+    data: ChallengeSummary
 }
 
 export interface ChallengeSummaryState extends Record<PUUID, ChallengeSummary> {}
