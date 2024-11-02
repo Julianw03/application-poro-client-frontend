@@ -16,6 +16,8 @@ export interface LobbyMemberCardProps {
 }
 
 export default function LobbyMemberCard(props: LobbyMemberCardProps) {
+    const DEFAULT_EMPTY_TOKEN_URL = Globals.STATIC_PREFIX + '/assets/png/challenges/background.png';
+    const MAXIMUM_TOP_CHALLENGES = 3;
 
     const regaliaMap = useSelector((state: AppState) => state.userRegalia);
     const challengeSummary = useSelector((state: AppState) => state.challengeSummary);
@@ -25,8 +27,6 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
     const member = props.member;
     const regaliaEntry = regaliaMap?.[member?.summonerId ?? ''];
     const challengeEntry = challengeSummary?.[member?.puuid ?? ''];
-
-    const DEFAULT_EMPTY_TOKEN_URL = Globals.STATIC_PREFIX + '/assets/png/challenges/background.png';
 
     const getPositionIconUrl = (position: string) => {
         return Globals.STATIC_PREFIX + '/assets/svg/positions/' + position.toLowerCase() + '.svg';
@@ -162,11 +162,6 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         }
 
         const crystalLevel = challengeEntry.overallChallengeLevel;
-        console.log(
-            'Crystal level: ',
-            crystalLevel,
-            Globals.STATIC_PREFIX + '/assets/png/challenges/crystals/' + crystalLevel.toLowerCase() + '.png'
-        );
         return (
             <div className={styles.crystalContainer}>
                 <PrettyImage imgProps={{
@@ -178,7 +173,6 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
 
     const renderMember = () => {
         const member = props.member;
-
         return (
             <div>
                 {/*Banner*/}
@@ -195,20 +189,31 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
                 </div>
                 <div className={styles.displayPlayerTokens}>
                     {
-                        challengeEntry?.topChallenges?.map((challenge, i) => {
-                            return (
-                                <div className={styles.singleToken} key={i}>
-                                    <PrettyImage imgProps={{
-                                        src: getIconUrl(challenge?.id, challenge?.currentLevel)
-                                    }} useLoader={false} className={styles.tokenImage}/>
-                                </div>
-                            );
-                        })
+                        renderChallengeIcons()
                     }
                 </div>
                 {renderPositionIcons()}
             </div>
         );
+    };
+
+    const renderChallengeIcons = () => {
+        const arr = [];
+
+        for (let i = 0; i < MAXIMUM_TOP_CHALLENGES; i++) {
+            arr.push(
+                <div className={styles.singleToken} key={i}>
+                    <PrettyImage imgProps={{
+                        src: getIconUrl(
+                            challengeEntry?.topChallenges[i]?.id,
+                            challengeEntry?.topChallenges[i]?.currentLevel
+                        )
+                    }} useLoader={false} className={styles.tokenImage}/>
+                </div>
+            );
+        }
+
+        return arr;
     };
 
     const getIconUrl = (id: number | undefined, currentLevel: string | undefined) => {
