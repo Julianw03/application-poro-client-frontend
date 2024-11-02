@@ -300,6 +300,7 @@ export interface UserRegalia {
         splitRewardLevel: number,
         tier: string
     }
+    lastSeasonHighestRank?: string
     selectedPrestigeCrest: number
     summonerLevel: number
 }
