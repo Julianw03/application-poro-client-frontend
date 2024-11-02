@@ -4,10 +4,6 @@
     width: 106%;
     bottom: 0;
     left: 0;
-
-
-    --crystal-level-url: url("http://localhost:35199/static/assets/png/challenges/crystals/iron.png");
-
     background-color: grey;
 }
 
@@ -18,6 +14,8 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+
+    background: rgb(20, 20, 20);;
 }
 
 .coverImage {
@@ -38,7 +36,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(transparent, rgba(0, 0, 0, 1));;
+    background-image: radial-gradient(transparent,transparent, rgba(0, 0, 0, 1));;
 }
 
 .bannerArea {
@@ -128,14 +126,13 @@
     object-position: 50% 0;
 }
 
-.profileIcon {
+.profileWrapper {
     position: relative;
     height: 100%;
     width: 100%;
 }
 
-.profileIcon::before {
-    content: "";
+.testProfileIcon {
     position: absolute;
     height: 40%;
     width: 40%;
@@ -147,13 +144,9 @@
     z-index: 1;
 
     transform: translate(-50%, -50%);
-    background-position: center;
-    background-size: cover;
-    background-image: url("http://127.0.0.1:35199/proxy/static/lol-game-data/assets/v1/profile-icons/4025.jpg")
 }
 
-.profileIcon::after {
-    content: "";
+.testCrystal {
     position: absolute;
 
     height: 40%;
@@ -164,21 +157,15 @@
 
     transform: translate(-50%, -50%);
 
-    z-index: 100;
-
-    background-position: center;
-    background-size: cover;
-    background-image: var(--crystal-level-url);
+    z-index: 1;
 }
 
-.prestigeRegalia::before {
-    content: "";
+.prestigeRegalia {
     position: absolute;
     height: 100%;
     width: 100%;
-    background-image: url("http://127.0.0.1:35199/static/assets/png/regalia/prestige/regalia-prestige-3.png");
-    background-size: cover;
-    background-position: 50% 50%;
+
+    z-index: 1;
 }
 
 
@@ -187,36 +174,37 @@
     width: 100%;
 }
 
-.rankedRegalia::before {
-    content: "";
-    position: absolute;
-    top: -12.5%;
-    left: 0;
-
-    z-index: 1;
-
-    scale: 1.2;
-
-    height: 100%;
-    width: 100%;
-
-    background-position: center;
-    background-size: cover;
-    background-image: url("http://127.0.0.1:35199/static/assets/png/regalia/plate/wings_gold_plate.png");
-}
-
 .rankedRegaliaVideo {
     height: 100%;
     width: 100%;
 
     object-fit: cover;
-    transform: scale(1.2) translateY(-12%);
+    transform: scale(1.2) translateY(-11%);
 
     z-index: -1;
 }
 
 .profileWrapper {
     height: 100%;
+    width: 100%;
+}
+
+.fillImage {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.rankedRegaliaPlateImage {
+    position: absolute;
+    top: -22.5%;
+    left: 0;
+
+    z-index: 1;
+
+    scale: 1.2;
+
+    height: 120%;
     width: 100%;
 }
 

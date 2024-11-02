@@ -1,79 +1,268 @@
 import styles from '../../../styles/Application/Containers/ContainerProfile.module.css';
 import {useSelector} from 'react-redux';
 import {AppState} from '../../../store';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import * as Globals from '../../../Globals';
 import axios from 'axios';
 import PrettyImage from '../../General/PrettyImage';
-import PrettyVideo from '../../General/PrettyVideo';
+import PrettyVideo, {PLACEHOLDER_TYPE} from '../../General/PrettyVideo';
+import {ChallengeSummary, PUUID, SUMMONER_ID, UserRegalia} from '../../../types/Store';
+
+const DEFAULT_EMPTY_TOKEN_URL = Globals.STATIC_PREFIX + '/assets/png/challenges/background.png';
+const MAXIMUM_TOKENS = 3;
+
+const RANKED_BANNER_ID = '2';
+
+interface BackgroundInfo {
+    accountId: number,
+    backdropImage: string,
+    backdropMaskColor: string,
+    backdropType: string,
+    backdropVideo: string,
+    championId: number,
+    profileIconId: number,
+    puuid: string,
+    summonerId: number,
+}
 
 export default function ContainerProfile() {
 
     const presence = useSelector((state: AppState) => state.selfPresence);
-    //TODO: Fetch background image
-    //TODO: Fetch banner image
-    //TODO; Get Challenge Level
+    const regaliaData = useSelector((state: AppState) => state.regalia);
+    const regaliaMap = useSelector((state: AppState) => state.userRegalia);
+    const challengeEntryMap = useSelector((state: AppState) => state.challengeSummary);
+
+    const [backgroundInfo, setBackgroundInfo] = useState<null | BackgroundInfo>(null);
 
     if (!presence) {
         return (<></>);
     }
 
+    const fetchBackground = (summonerId: SUMMONER_ID) => {
+        axios.get(Globals.PROXY_PREFIX + '/lol-collections/v1/inventories/' + summonerId + '/backdrop')
+            .then((response) => {
+                console.log('Background info: ', response.data);
+                setBackgroundInfo(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const requestRegaliaUpdate = (summonerId: SUMMONER_ID) => {
+        axios.get(Globals.PROXY_PREFIX + '/lol-regalia/v2/summoners/'+ summonerId +'/regalia/async')
+            .then((response) => {
+                console.log('Refreshed regalia data.');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+
+    const requestChallengeUpdate = (puuid: PUUID) => {
+        axios.get(Globals.PROXY_PREFIX + '/lol-challenges/v1/summary-player-data/player/' + puuid)
+            .then((response) => {
+                console.log('Refreshed challenge data.');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
     //On-mount
     useEffect(
         () => {
-            if (presence.puuid) {
-                axios.get(Globals.PROXY_PREFIX + '/lol-hovercard/v1/friend-info/' + presence.puuid)
-                    .then((response) => {
-                        console.log('Refreshed presence data.');
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-
-                axios.get(Globals.PROXY_PREFIX + '/lol-challenges/v1/summary-player-data/player/' + presence.puuid)
-                    .then((response) => {
-                        console.log('Refreshed challenge data.');
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
+            if (presence.puuid && presence.summonerId) {
+                requestChallengeUpdate(presence.puuid);
+                requestRegaliaUpdate(presence.summonerId);
+                fetchBackground(presence.summonerId);
             }
-
         },
         []
     );
 
-    useEffect(
-        () => {
-            if (!presence) {
-                return;
+    const getBannerUrl = (selectedBannerId: string | undefined) => {
+        if (selectedBannerId === RANKED_BANNER_ID) {
+            const currentRank = regaliaMap[presence.summonerId]?.lastSeasonHighestRank?.toUpperCase() ?? 'UNRANKED';
+            const url = regaliaData?.[selectedBannerId]?.secondaryMap?.[currentRank ?? 'UNRANKED']?.assetPath;
+            if (url === undefined) {
+                return '';
             }
-            const previewSpaceElement = document.querySelector(`.${styles.previewSpace}`) as HTMLDivElement;
-            const crystalLevel = presence?.lol.challengeCrystalLevel?.toLowerCase();
-            if (previewSpaceElement && crystalLevel) {
-                console.log(crystalLevel);
-                previewSpaceElement.style.setProperty(
-                    '--crystal-level-url',
-                    `url("http://localhost:35199/static/assets/png/challenges/crystals/${crystalLevel}.png")`
-                );
-            }
-        },
-        [presence?.lol.challengeCrystalLevel]
-    );
+            return Globals.PROXY_PREFIX + url;
+        }
+
+        const selectedPath = regaliaData?.[selectedBannerId]?.default?.assetPath;
+        if (!selectedPath) {
+            return '';
+        }
+        return Globals.PROXY_PREFIX + selectedPath;
+    };
+
+
+    const renderBackground = (bgInfo: BackgroundInfo | null) => {
+        if (bgInfo == null || bgInfo?.backdropVideo) {
+            return (
+                <PrettyVideo
+                    videoProps={{
+                        src: Globals.PROXY_PREFIX + bgInfo?.backdropVideo,
+                        autoPlay: true,
+                        muted: true,
+                        loop: true
+                    }}
+                    className={styles.coverImage}
+                    placeholderType={PLACEHOLDER_TYPE.SPINNER}
+                />
+            );
+        }
+
+        return (
+            <PrettyImage
+                imgProps={{
+                    src: Globals.PROXY_PREFIX + bgInfo?.backdropImage
+                }}
+                className={styles.coverImage}
+                useLoader={false}
+            />
+        );
+    };
+
+    const renderRankedRegalia = (regalia: UserRegalia) => {
+        const highestRankedEntry = regalia?.highestRankedEntry?.tier?.toLowerCase() ?? 'unranked';
+
+        const videoUrl = Globals.STATIC_PREFIX + `/assets/webm/regalia/emblem-wings-magic-${highestRankedEntry}.webm`;
+        const plateUrl = Globals.STATIC_PREFIX + `/assets/png/regalia/plate/wings_${highestRankedEntry}_plate.png`;
+
+        return (
+            <div className={styles.rankedRegalia}>
+                <PrettyVideo
+                    className={styles.rankedRegaliaVideo}
+                    videoProps={{
+                        autoPlay: true,
+                        loop: true,
+                        muted: true,
+                        src: videoUrl
+                    }}
+                    placeholderType={PLACEHOLDER_TYPE.INVISIBLE}
+                />
+                <PrettyImage
+                    imgProps={{
+                        src: plateUrl
+                    }}
+                    className={styles.rankedRegaliaPlateImage}
+                    useLoader={false}
+                />
+            </div>
+        );
+    };
+
+
+    const renderNormalRegalia = (regalia: UserRegalia | undefined) => {
+        const selectedRegalia = regalia?.selectedPrestigeCrest;
+
+        const url = Globals.STATIC_PREFIX + `/assets/png/regalia/prestige/regalia-prestige-${selectedRegalia}.png`;
+
+        return (
+            <PrettyImage
+                imgProps={{
+                    src: url
+                }}
+                className={styles.prestigeRegalia}
+                useLoader={false}
+            />
+        );
+    };
+
+    const renderRegalia = (regalia: UserRegalia | undefined) => {
+        if (regalia === undefined) {
+            return <></>;
+        }
+
+        if (regalia?.crestType === 'ranked') {
+            return renderRankedRegalia(regalia);
+        }
+
+        return renderNormalRegalia(regalia);
+    };
+
+    const renderProfileIcon = (presence: UserRegalia | undefined) => {
+
+        const profileIconId = presence?.profileIconId;
+
+        const url = Globals.PROXY_PREFIX + `/lol-game-data/assets/v1/profile-icons/${profileIconId}.jpg`;
+
+        return (
+            <PrettyImage
+                imgProps={{
+                    src: url
+                }}
+                useLoader={false}
+                className={styles.testProfileIcon}
+            />
+        );
+    };
+
+    const renderCrystal = (challengeEntry: ChallengeSummary | undefined) => {
+
+        const crystalLevel = challengeEntry?.overallChallengeLevel?.toLowerCase();
+
+        const url = Globals.STATIC_PREFIX + `/assets/png/challenges/crystals/${crystalLevel}.png`;
+
+        return (
+            <PrettyImage
+                imgProps={{
+                    src: url
+                }}
+                className={styles.testCrystal}
+                useLoader={false}
+            />
+        );
+
+    };
+
+
+    const renderTokens = (challengeEntry: ChallengeSummary | undefined) => {
+        const retArr = [];
+
+        for (let i = 0; i < MAXIMUM_TOKENS; i++) {
+
+            const token = challengeEntry?.topChallenges?.[i];
+            const currentLevel = token?.currentLevel.toUpperCase();
+            const assetPath = token?.levelToIconPath?.[currentLevel];
+
+            const url = assetPath ? Globals.PROXY_PREFIX + assetPath : DEFAULT_EMPTY_TOKEN_URL;
+
+            retArr.push(
+                <div className={styles.singleToken} key={i}>
+                    <PrettyImage
+                        className={styles.tokenImage}
+                        imgProps={{
+                            src: url
+                        }}
+                    />
+                </div>
+            );
+        }
+
+        return retArr;
+    };
+
+    const challengeEntry = challengeEntryMap[presence.puuid];
+    const regaliaEntry = regaliaMap[presence.summonerId];
 
     return (
         <div className={styles.previewSpace}>
             <div className={styles.backgroundImageContainer}>
-                <img className={styles.coverImage}
-                     src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Characters/Ahri/Skins/Skin76/Images/ahri_splash_centered_76.jpg"
-                     alt=""/>
+                {
+                    renderBackground(backgroundInfo)
+                }
                 <div className={styles.backgroundImageFilter}>
                 </div>
             </div>
             <div className={styles.bannerArea}>
                 <div className={styles.bannerImageContainer}>
                     <img className={styles.bannerImage}
-                         src="http://127.0.0.1:35199/proxy/lol-game-data/assets/ASSETS/Regalia/BannerSkins/UnkillableDemonKingBanner.ACCESSORIES_14_12.png"/>
+                        src={getBannerUrl(challengeEntry?.bannerId)}/>
                 </div>
                 <div className={styles.banner}>
                     <div className={styles.spacer}></div>
@@ -84,19 +273,16 @@ export default function ContainerProfile() {
                     </div>
                     <div className={styles.profileSection}>
                         <div className={styles.profileContainer}>
-                            <div className={styles.profileIcon}>
-                                {/*<div className={styles.prestigeRegalia}></div>*/}
-                                <div className={styles.rankedRegalia}>
-                                    <PrettyVideo
-                                        className={styles.rankedRegaliaVideo}
-                                        videoProps={{
-                                            autoPlay: true,
-                                            loop: true,
-                                            muted: true,
-                                            src: Globals.STATIC_PREFIX + '/assets/webm/regalia/emblem-wings-magic-gold.webm'
-                                        }}
-                                    />
-                                </div>
+                            <div className={styles.profileWrapper}>
+                                {
+                                    renderProfileIcon(regaliaEntry)
+                                }
+                                {
+                                    renderRegalia(regaliaEntry)
+                                }
+                                {
+                                    renderCrystal(challengeEntry)
+                                }
                             </div>
                         </div>
                     </div>
@@ -108,33 +294,14 @@ export default function ContainerProfile() {
                     <div className={styles.tokenSection}>
                         <div className={styles.tokenWrapper}>
                             <div className={styles.tokenTitle}>
-                                Poroyalty
+                                {
+                                    challengeEntry?.title?.name
+                                }
                             </div>
                             <div className={styles.tokens}>
-                                <div className={styles.singleToken}>
-                                    <PrettyImage
-                                        className={styles.tokenImage}
-                                        imgProps={{
-                                            src: Globals.PROXY_PREFIX + '/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png'
-                                        }}
-                                    />
-                                </div>
-                                <div className={styles.singleToken}>
-                                    <PrettyImage
-                                        className={styles.tokenImage}
-                                        imgProps={{
-                                            src: Globals.STATIC_PREFIX + '/assets/png/challenges/background.png'
-                                        }}
-                                    />
-                                </div>
-                                <div className={styles.singleToken}>
-                                    <PrettyImage
-                                        className={styles.tokenImage}
-                                        imgProps={{
-                                            src: Globals.PROXY_PREFIX + '/lol-game-data/assets/ASSETS/Challenges/Config/504004/Tokens/iron.png'
-                                        }}
-                                    />
-                                </div>
+                                {
+                                    renderTokens(challengeEntry)
+                                }
                             </div>
                         </div>
                     </div>
