@@ -100,9 +100,10 @@ export default function QueueDisplay() {
 
     const renderLobbyInfo = () => {
         if (lobbyState?.gameConfig?.isCustom) {
-            return (<div className={styles.hidden}>
-                Test
-            </div>);
+            return (
+                <div className={styles.hidden}>
+                </div>
+            );
         }
 
         return (
