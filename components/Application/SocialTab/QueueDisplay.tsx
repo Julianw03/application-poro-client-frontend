@@ -5,21 +5,14 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import PrettyVideo from '../../General/PrettyVideo';
 import PrettyImage from '../../General/PrettyImage';
-import {MapAssets} from '../../../types/Store';
 
 export default function QueueDisplay() {
 
     const gameflowState = useSelector((state: AppState) => state.gameflowState);
     const matchmakingState = useSelector((state: AppState) => state.matchmakingSearchState);
     const lobbyState = useSelector((state: AppState) => state.lobbyState);
-
     const queues = useSelector((state: AppState) => state.queues);
-
     const mapAssets = useSelector((state: AppState) => state.mapAssets);
-
-    if (!gameflowState || !matchmakingState || !lobbyState || !queues || !mapAssets) {
-        return <></>;
-    }
 
     const renderActivityName = () => {
         const gameMode = lobbyState?.gameConfig?.queueId ? queues[lobbyState?.gameConfig?.queueId]?.description : '';
@@ -27,8 +20,8 @@ export default function QueueDisplay() {
     };
 
     const renderMemberIcons = () => {
-        const totalCount = lobbyState.members.length;
-        const memberCount = lobbyState.members.filter((member) => member?.puuid).length;
+        const totalCount = lobbyState?.members?.length ?? 0;
+        const memberCount = lobbyState?.members?.filter((member) => member?.puuid)?.length ?? 0;
 
         const returnedMembers = [];
 
@@ -71,7 +64,7 @@ export default function QueueDisplay() {
 
     const renderMemberCount = () => {
         const totalCount = lobbyState?.members?.length;
-        const memberCount = lobbyState.members?.filter((member) => member?.puuid).length;
+        const memberCount = lobbyState?.members?.filter((member) => member?.puuid).length;
 
         return (
             <div className={styles.textMemberCount}>
@@ -94,7 +87,11 @@ export default function QueueDisplay() {
     };
 
     const renderLobbyMemberCount = () => {
-        if (lobbyState.members?.length <= 8) {
+        if (lobbyState == null) {
+            return <div className={styles.hidden}></div>;
+        }
+
+        if (lobbyState?.members?.length <= 8) {
             return renderMemberIcons();
         }
 
@@ -102,10 +99,9 @@ export default function QueueDisplay() {
     };
 
     const renderLobbyInfo = () => {
-
         if (lobbyState?.gameConfig?.isCustom) {
             return (<div className={styles.hidden}>
-
+                Test
             </div>);
         }
 
@@ -162,7 +158,7 @@ export default function QueueDisplay() {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
     const renderQueueInfo = () => {
-        if (!matchmakingState.isCurrentlyInQueue) {
+        if (!matchmakingState?.isCurrentlyInQueue) {
             return (
                 <div className={Globals.applyMultipleStyles(
                     styles.container,
@@ -274,7 +270,6 @@ export default function QueueDisplay() {
                 return renderLobbyInfo();
             default:
                 return <div className={styles.hidden}>
-
                 </div>;
         }
     };
