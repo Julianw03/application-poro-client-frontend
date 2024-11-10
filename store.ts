@@ -3,7 +3,7 @@ import {
     ActiveContainerState,
     ChallengeData, ChallengeSummaryState, ChallengeSummaryUpdate,
     ChampionState,
-    ChampSelectState,
+    ChampSelectState, CompanionState,
     ContainerState,
     CurrentSummonerState,
     EOGHonorState,
@@ -26,8 +26,8 @@ import {
     RemoteMapAssets,
     Skin, SUMMONER_ID,
     SummonerSpell,
-    SummonerSpellState,
-    TickerMessage, UserRegalia, UserRegaliaMap, UserRegaliaUpdate,
+    SummonerSpellState, TFTDamageSkinState, TFTMapSkinState,
+    TickerMessage, UserLoadoutState, UserRegalia, UserRegaliaMap, UserRegaliaUpdate,
     WindowFocusState
 } from './types/Store';
 import * as Globals from './Globals';
@@ -43,6 +43,9 @@ export interface AppState {
     queueTypeToId: Record<string, number>
     champions: ChampionState | null
     challengeData: ChallengeData | null
+    companions: CompanionState | null
+    tftMaps: TFTMapSkinState | null
+    tftDamageSkins: TFTDamageSkinState | null
 
     //========= STATIC MAPS =========
     skinsByChampion: Record<number, number[]>
@@ -55,18 +58,20 @@ export interface AppState {
     selfPresence: PresenceState | null,
     gameflowState: GameflowState | null,
     patcherState: PatcherState | null,
-    lobbyState: LobbyState | Record<string, never>,
+    lobbyState: LobbyState | null,
     lootState: LootState | null,
     matchmakingSearchState: MatchmakingSearchState | null,
-    invitations: Invitation[] | null,
-    tickerMessages: TickerMessage[] | null,
+    userLoadoutState: UserLoadoutState | null,
     currentSummoner: CurrentSummonerState | null
     honorEOGState: EOGHonorState | null,
     champSelectState: ChampSelectState | null,
     challengeSummary: ChallengeSummaryState | null,
-    userRegalia: UserRegaliaMap | null,
-
     genericPresence: GenericPresenceState | null,
+
+    invitations: Invitation[] | null,
+    tickerMessages: TickerMessage[] | null,
+
+    userRegalia: UserRegaliaMap | null,
 
     //--- INVENTORY ---
     // ownedIcons: object[],
@@ -105,6 +110,9 @@ const INITIAL_MAP_ASSETS_STATE = null;
 const INITIAL_SUMMONER_SPELLS = null;
 const INITIAL_REGALIA_STATE = null;
 const INITIAL_SKIN_STATE = null;
+const INITIAL_COMPANIONS = null;
+const INITIAL_TFT_MAPS = null;
+const INITIAL_TFT_DAMAGE_SKINS = null;
 const INITIAL_QUEUES = null;
 const INITIAL_QUEUES_TYPE_TO_ID = null;
 const INITIAL_CHAMPION_STATE = null;
@@ -138,6 +146,8 @@ const INITIAL_USER_REGALIA = null;
 const INITIAL_TICKER_MESSAGES = null;
 
 const INITIAL_HONOR_EOG_STATE = null;
+
+const INITIAL_USER_LOADOUT_STATE = null;
 
 const INITIAL_WINDOW_FOCUSED = {focused: true} as WindowFocusState;
 
@@ -180,6 +190,15 @@ export const ACTION_RESET_CHAMPIONS = createAction('champions/reset');
 
 export const ACTION_SET_CHALLENGE_DATA = createAction<ChallengeData>('challengeData/set');
 export const ACTION_RESET_CHALLENGE_DATA = createAction('challengeData/reset');
+
+export const ACTION_SET_TFT_COMPANIONS = createAction<CompanionState>('companions/set');
+export const ACTION_RESET_TFT_COMPANIONS = createAction('companions/reset');
+
+export const ACTION_SET_TFT_MAPS = createAction<TFTMapSkinState>('tftMaps/set');
+export const ACTION_RESET_TFT_MAPS = createAction('tftMaps/reset');
+
+export const ACTION_SET_TFT_DAMAGE_SKINS = createAction<TFTDamageSkinState>('tftDamageSkins/set');
+export const ACTION_RESET_TFT_DAMAGE_SKINS = createAction('tftDamageSkins/reset');
 
 export const ACTION_SET_OWNED_SKINS = createAction<OwnedSkinState>('ownedSkins/set');
 export const ACTION_RESET_OWNED_SKINS = createAction('ownedSkins/reset');
@@ -226,6 +245,9 @@ export const ACTION_RESET_TICKER_MESSAGES = createAction('tickerMessages/reset')
 
 export const ACTION_SET_HONOR_EOG_STATE = createAction<EOGHonorState>('honorEOG/set');
 export const ACTION_RESET_HONOR_EOG_STATE = createAction('honorEOG/reset');
+
+export const ACTION_SET_USER_LOADOUT_STATE = createAction<UserLoadoutState>('userLoadout/set');
+export const ACTION_RESET_USER_LOADOUT_STATE = createAction('userLoadout/reset');
 
 export const ACTION_SET_CURRENT_SUMMONER = createAction<CurrentSummonerState>('currentSummoner/set');
 export const ACTION_RESET_CURRENT_SUMMONER = createAction('currentSummoner/reset');
@@ -302,6 +324,72 @@ const regaliaReducer = createReducer(
             )
             .addCase(
                 ACTION_RESET_REGALIA,
+                (state, action) => {
+                    return null;
+                }
+            )
+            .addDefaultCase(
+                (state, action) => {}
+            );
+    }
+);
+
+const companionsReducer = createReducer(
+    INITIAL_COMPANIONS,
+    (builder) => {
+        builder
+            .addCase(
+                ACTION_SET_TFT_COMPANIONS,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            .addCase(
+                ACTION_RESET_TFT_COMPANIONS,
+                (state, action) => {
+                    return null;
+                }
+            )
+            .addDefaultCase(
+                (state, action) => {}
+            );
+    }
+);
+
+const tftMapsReducer = createReducer(
+    INITIAL_TFT_MAPS,
+    (builder) => {
+        builder
+            .addCase(
+                ACTION_SET_TFT_MAPS,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            .addCase(
+                ACTION_RESET_TFT_MAPS,
+                (state, action) => {
+                    return null;
+                }
+            )
+            .addDefaultCase(
+                (state, action) => {}
+            );
+    }
+);
+
+const tftDamageSkinsReducer = createReducer(
+    INITIAL_TFT_DAMAGE_SKINS,
+    (builder) => {
+        builder
+            .addCase(
+                ACTION_SET_TFT_DAMAGE_SKINS,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            .addCase(
+                ACTION_RESET_TFT_DAMAGE_SKINS,
                 (state, action) => {
                     return null;
                 }
@@ -749,6 +837,28 @@ const champSelectStateReducer = createReducer(
     }
 );
 
+const userLoadoutStateReducer = createReducer(
+    INITIAL_USER_LOADOUT_STATE,
+    builder => {
+        builder
+            .addCase(
+                ACTION_SET_USER_LOADOUT_STATE,
+                (state, action) => {
+                    return action.payload;
+                }
+            )
+            .addCase(
+                ACTION_RESET_USER_LOADOUT_STATE,
+                (state, action) => {
+                    return null;
+                }
+            )
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .addDefaultCase((state, action) => {
+            });
+    }
+);
+
 const matchmakingSearchStateReducer = createReducer(
     INITIAL_MATCHMAKING_SEARCH_STATE,
     builder => {
@@ -957,6 +1067,9 @@ export const store = configureStore({
         queueTypeToId: queueTypeToIdReducer,
         champions: championReducer,
         challengeData: challengeDataReducer,
+        companions: companionsReducer,
+        tftMaps: tftMapsReducer,
+        tftDamageSkins: tftDamageSkinsReducer,
 
         ownedSkins: ownedSkinsReducer,
         ownedChampions: ownedChampionsReducer,
@@ -976,6 +1089,7 @@ export const store = configureStore({
         gameflowState: gameflowStateReducer,
         currentSummoner: currentSummonerReducer,
         champSelectState: champSelectStateReducer,
+        userLoadoutState: userLoadoutStateReducer,
         matchmakingSearchState: matchmakingSearchStateReducer,
         honorEOGState: honorEOGReducer,
         challengeSummary: challengeSummaryReducer,

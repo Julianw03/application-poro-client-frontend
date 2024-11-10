@@ -82,8 +82,8 @@ export interface LolPresence {
     challengePoints?: number,
     challengeTokensSelected?: string, //In this wonderful form "ID_1,ID_2,ID_3", I surely love league of legends
     championId: number,
-    companionId: string,
-    damageSkinId: number,
+    companionId: ItemId,
+    damageSkinId: ItemId,
     gameId?: number,
     gameMode?: string,
     gameQueueType: string,
@@ -93,7 +93,7 @@ export interface LolPresence {
     legendaryMasteryScore?: string,
     level: string,
     mapId: string,
-    mapSkinId: string,
+    mapSkinId: ItemId,
     masteryScore?: string,
     playerTitleSelected?: string
     profileIcon: string,
@@ -702,6 +702,54 @@ export interface CurrentSummonerState {
     xpUntilNextLevel: number
 }
 
+//======================= CURRENT LOADOUT =======================
+
+export interface UserLoadoutState {
+    id: PUUID
+    itemId: null,
+    loadout: {
+        BANNER_FLAG: LoadoutData,
+        COMPANION_SLOT: LoadoutData,
+        EMOTES_ACE: LoadoutData,
+        EMOTES_FIRST_BLOOD: LoadoutData,
+        EMOTES_START: LoadoutData,
+        EMOTES_VICTORY: LoadoutData,
+        EMOTES_WHEEL_CENTER: LoadoutData,
+        EMOTES_WHEEL_LEFT: LoadoutData,
+        EMOTES_WHEEL_LOWER_LEFT: LoadoutData,
+        EMOTES_WHEEL_LOWER_RIGHT: LoadoutData,
+        EMOTES_WHEEL_LOWER: LoadoutData,
+        EMOTES_WHEEL_RIGHT: LoadoutData,
+        EMOTES_WHEEL_UPPER_LEFT: LoadoutData,
+        EMOTES_WHEEL_UPPER_RIGHT: LoadoutData,
+        EMOTES_WHEEL_UPPER: LoadoutData,
+        REGALIA_BANNER_SLOT: LoadoutData,
+        REGALIA_CREST_SLOT: LoadoutData,
+        STRAWBERRY_DIFFICULTY: LoadoutData,
+        STRAWBERRY_MAP_SLOT: LoadoutData,
+        TFT_DAMAGE_SKIN_SLOT: LoadoutData,
+        TFT_EVENT_SKILL_1: LoadoutData,
+        TFT_EVENT_SKILL_2: LoadoutData,
+        TFT_EVENT_SKILL_3: LoadoutData,
+        TFT_EVENT_SKILL_4: LoadoutData,
+        TFT_EVENT_SKILL_5: LoadoutData,
+        TFT_EVENT_SKILL_6: LoadoutData,
+        TFT_MAP_SKIN_SLOT: LoadoutData,
+        TFT_PLAYBOOK_SLOT: LoadoutData,
+        TOURNAMENT_TROPHY: LoadoutData,
+        WARD_SKIN_SLOT: LoadoutData
+    }
+    name: string,
+    refreshTime: string
+    scope: 'ACCOUNT'
+}
+
+export interface LoadoutData {
+    contentId: ContentId,
+    inventoryType: string,
+    itemId: ItemId,
+}
+
 //======================= SUMMONER SPELLS =======================
 
 export interface SummonerSpell {
@@ -717,6 +765,7 @@ export interface SummonerSpell {
 export interface SummonerSpellState extends Record<number, SummonerSpell> {
 }
 
+//======================= TFT COMPANIONS =======================
 
 export interface Companion {
     contentId: ContentId,
@@ -734,7 +783,39 @@ export interface Companion {
     TFTOnly: boolean,
 }
 
-export interface CompanionState extends Record<number, Companion> {}
+export interface CompanionState extends Record<ItemId, Companion> {}
+
+
+//======================= TFT MAP SKINS =======================
+
+export interface TFTMapSkin {
+    contentId: ContentId,
+    itemId: ItemId,
+    name: string,
+    loadoutsIcon: string
+    groupId: number,
+    groupName: string,
+    rarity: string,
+    rarityValue: number
+}
+
+export interface TFTMapSkinState extends Record<ItemId, TFTMapSkin> {}
+
+//======================= TFT DAMAGE SKINS =======================
+
+export interface TFTDamageSkin {
+    contentId: ContentId,
+    itemId: ItemId,
+    name: string,
+    loadoutsIcon: string,
+    groupId: number,
+    groupName: string,
+    rarity: string,
+    rarityValue: number,
+    level: number
+}
+
+export interface TFTDamageSkinState extends Record<ItemId, TFTDamageSkin> {}
 
 //======================= SKINS =======================
 

@@ -356,6 +356,13 @@ export const isEmptyObject = (obj: Record<never, unknown>): boolean => {
     return Object.keys(obj).length === 0;
 };
 
+export const getIconPathUrl = (iconId: string | null): string => {
+    if (iconId === null) {
+        return '';
+    }
+    return PROXY_STATIC_PREFIX + `/lol-game-data/assets/v1/profile-icons/${iconId}.jpg`;
+};
+
 //================================= TRANSFORM FUNCTIONS ===================================
 
 export const getPrettyCount = (count: number): string => {
@@ -473,6 +480,7 @@ export const UPDATES = {
     LOOT_UPDATE: 'STATE_LOOT',
     CURRENT_SUMMONER_UPDATE: 'STATE_CURRENT_SUMMONER',
     MATCHMAKING_SEARCH_STATE_UPDATE: 'STATE_MATCHMAKING_SEARCH',
+    STATE_CURRENT_LOADOUT: 'STATE_CURRENT_LOADOUT',
 
 
     FRIEND_UPDATE: 'SINGLE_FRIEND',

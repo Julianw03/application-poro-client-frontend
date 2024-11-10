@@ -109,7 +109,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return (
             <>
                 <img className={styles.prestigeImage} draggable={false}
-                    src={getPrestigeRegaliaUrl(getRegaliaForMember(member)?.selectedPrestigeCrest)} alt={''}/>
+                    src={getPrestigeRegaliaUrl(getRegaliaForMember(member)?.selectedPrestigeCrest ?? Math.floor(Math.min(getRegaliaForMember(member)?.summonerLevel ?? 525, 525 )/ 25))} alt={''}/>
             </>
         );
     };

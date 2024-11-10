@@ -68,6 +68,11 @@
     height: 50%;
     aspect-ratio: 1;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
     border-radius: 1000000px;
     border: red solid 2px;
 }

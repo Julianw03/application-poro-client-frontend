@@ -48,6 +48,7 @@
     width: 100%;
     aspect-ratio: 5;
     top: 45%;
+    cursor: pointer;
 }
 
 .displayPlayerTitle {
