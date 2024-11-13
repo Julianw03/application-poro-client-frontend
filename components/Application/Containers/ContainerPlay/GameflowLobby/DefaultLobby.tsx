@@ -13,7 +13,7 @@ export default function DefaultLobby({lobby}: DefaultLobbyProps) {
                 lobby.members?.map(
                     (member, index) => {
                         const key = member.puuid ?? index;
-                        return <LobbyMemberCard member={member} key={key}/>;
+                        return <LobbyMemberCard member={member} lobby={lobby} key={key}/>;
                     }
                 )
             }

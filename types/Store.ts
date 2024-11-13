@@ -491,6 +491,8 @@ export interface LobbyConfig {
     maxLobbySize: number,
     queueId: number,
     showPositionSelector: boolean
+    shouldForceScarcePositionSelection: boolean,
+    showQuickPlaySlotSelection: boolean
 }
 
 export interface QuickplaySlot {
