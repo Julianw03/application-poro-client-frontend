@@ -60,20 +60,23 @@ import {
     FriendGroupUpdateData,
     FriendUpdateData,
     QueueUpdateData,
-    RegaliaUpdateData,
-    ACTION_SET_REGALIA
+    ACTION_SET_REGALIA,
+    ACTION_SET_TFT_COMPANIONS,
+    ACTION_RESET_TFT_COMPANIONS,
+    ACTION_SET_TFT_MAPS,
+    ACTION_SET_TFT_DAMAGE_SKINS, ACTION_SET_USER_LOADOUT_STATE
 } from '../store';
 import {
-    ChallengeData, ChallengeSummary, ChallengeSummaryState, ChallengeSummaryUpdate,
+    ChallengeData, ChallengeSummaryState, ChallengeSummaryUpdate,
     ChampionState,
-    ChampSelectState,
+    ChampSelectState, Companion, CompanionState,
     CurrentSummonerState,
     EOGHonorState,
     Friend,
     FriendGroup,
-    GameflowState, GenericPresenceState, GenericPresenceUpdate, ID,
+    GameflowState, GenericPresenceState, GenericPresenceUpdate,
     InternalState,
-    Invitation,
+    Invitation, ItemId,
     LobbyState,
     LootState,
     MatchmakingSearchState,
@@ -82,21 +85,20 @@ import {
     OwnedChampionState,
     OwnedSkin,
     PatcherState,
-    PresenceState, PUUID,
+    PresenceState,
     Queue, Regalia, RegaliaJsonData,
     RemoteMapAssets,
     Skin,
-    SummonerSpell,
-    TickerMessage, UserRegaliaMap, UserRegaliaUpdate
+    SummonerSpell, TFTDamageSkin, TFTDamageSkinState, TFTMapSkin, TFTMapSkinState,
+    TickerMessage, UserLoadoutState, UserRegaliaMap, UserRegaliaUpdate
 } from '../types/Store';
 import {useEffect, useState} from 'react';
 import DynamicBackground from '../components/DynamicBackground';
 import Application from '../components/Application';
 import LoadingComponent from '../components/LoadingComponent';
 import PersistentMenu from './PersistentMenu';
-import ReworkedMusicSystem, {DefaultSound, SoundScope} from './Audio/ReworkedMusicSystem';
+import ReworkedMusicSystem from './Audio/ReworkedMusicSystem';
 import MusicManager from './MusicManager';
-import {BACKEND_STATE_DISCONNECTED} from '../Globals';
 
 export default function App() {
 
@@ -111,12 +113,6 @@ export default function App() {
 
     interface Message {
         event: string;
-        data: object | object[] | string | number | boolean | null;
-    }
-
-    interface SingleKeyUpdateMessage {
-        event: string;
-        key: string;
         data: object | object[] | string | number | boolean | null;
     }
 
@@ -201,6 +197,8 @@ export default function App() {
         dispatch(ACTION_RESET_SUMMONER_SPELLS());
         dispatch(ACTION_RESET_USER_REGALIA());
         dispatch(ACTION_RESET_CHALLENGE_DATA());
+        dispatch(ACTION_RESET_QUEUES());
+        dispatch(ACTION_RESET_TFT_COMPANIONS());
         dispatch(ACTION_RESET_CURRENT_SUMMONER());
         dispatch(ACTION_RESET_SELF_PRESENCE());
         dispatch(ACTION_RESET_GAMEFLOW_STATE());
@@ -212,7 +210,6 @@ export default function App() {
         dispatch(ACTION_RESET_INVITATIONS());
         dispatch(ACTION_RESET_TICKER_MESSAGES());
         dispatch(ACTION_RESET_CHALLENGE_SUMMARY());
-        dispatch(ACTION_RESET_QUEUES());
     }
 
     const handleMessage = (messageText: string) => {
@@ -376,6 +373,14 @@ export default function App() {
                         )
                     );
                     break;
+                case Globals.UPDATES.STATE_CURRENT_LOADOUT:
+                    const loadout = message.data as unknown as UserLoadoutState;
+                    dispatch(
+                        ACTION_SET_USER_LOADOUT_STATE(
+                            loadout
+                        )
+                    );
+                    break;
                 case Globals.UPDATES.OWNED_CHAMPIONS_UPDATE:
                     // eslint-disable-next-line no-case-declarations
                     const ownedChampions = message.data as OwnedChampion[];
@@ -397,7 +402,7 @@ export default function App() {
                 case Globals.UPDATES.FRIEND_HOVERCARD_UPDATE:
                     break;
                 case Globals.UPDATES.INITIAL_GENERIC_PRESENCE_UPDATE:
-                    const presenceState = message.data as GenericPresenceState
+                    const presenceState = message.data as GenericPresenceState;
                     dispatch(
                         ACTION_SET_PRESENCE(
                             presenceState
@@ -548,7 +553,7 @@ export default function App() {
 
     const fetchMapAssets = () => {
         console.log('[Fetch] Map Assets');
-        axios.get(Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/map-assets/map-assets.json')
+        axios.get(Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/map-assets/map-assets.json')
             .then((response) => {
                 if (response.data.errorCode) {
                     console.error('Failed to load Map Assets');
@@ -570,7 +575,7 @@ export default function App() {
 
     const fetchChampions = () => {
         console.log('[Fetch] Champions');
-        axios.get(Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/champion-summary.json')
+        axios.get(Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/champion-summary.json')
             .then((response) => {
                 const intermediate: ChampionState = {};
                 if (response.data.errorCode) {
@@ -599,7 +604,7 @@ export default function App() {
     const fetchSummonerSpells = () => {
         console.log('[Fetch] Summoner Spells');
         axios.get(
-            Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/summoner-spells.json'
+            Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/summoner-spells.json'
         )
             .then((response) => {
                 if (response.data.errorCode) {
@@ -629,7 +634,7 @@ export default function App() {
     const fetchChallengeData = () => {
         console.log('[Fetch] Challenges');
         axios.get(
-            Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/challenges.json'
+            Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/challenges.json'
         )
             .then((response) => {
                 if (response.data.errorCode) {
@@ -653,15 +658,13 @@ export default function App() {
     const fetchRegaliaData = () => {
         console.log('[Fetch] Regalia');
         axios.get(
-            Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/regalia.json'
+            Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/regalia.json'
         )
             .then((response) => {
                 if (response.data.errorCode) {
                     console.error('Failed to load Challenges');
                     return;
                 }
-
-                console.log(response.data);
 
                 const allRegalias = response.data as Regalia[];
                 const regaliaState = {} as RegaliaJsonData;
@@ -699,6 +702,90 @@ export default function App() {
             });
     };
 
+    const fetchTFTCompanionData = () => {
+        console.log('[Fetch] TFT Companions');
+        axios.get(
+            Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/companions.json'
+        ).then((response) => {
+            if (response.data.errorCode) {
+                console.error('Failed to load TFT Companions');
+                return;
+            }
+
+            const allCompanions = response.data as Companion[];
+            const companionState = {} as CompanionState;
+            allCompanions.forEach((companion) => {
+                companionState[companion.itemId] = companion;
+            });
+
+            console.log(companionState);
+            console.log('[Fetch] TFT Companions - Done');
+            dispatch(
+                ACTION_SET_TFT_COMPANIONS(
+                    companionState
+                )
+            );
+        }).catch((error) => {
+            console.error(error);
+        });
+    };
+
+    const fetchTFTMapSkins = () => {
+        console.log('[Fetch] TFT Map Skins');
+        axios.get(
+            Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/tftmapskins.json'
+        ).then((response) => {
+            if (response.data.errorCode) {
+                console.error('Failed to load TFT Map Skins');
+                return;
+            }
+
+            const allTftMapSkins = response.data as TFTMapSkin[];
+            const tftMaps = {} as TFTMapSkinState;
+            allTftMapSkins.forEach((companion) => {
+                tftMaps[companion.itemId] = companion;
+            });
+
+            console.log(response.data);
+            console.log('[Fetch] TFT Map Skins - Done');
+            dispatch(
+                ACTION_SET_TFT_MAPS(
+                    tftMaps
+                )
+            );
+        }).catch((error) => {
+            console.error(error);
+        });
+    };
+
+    const fetchTFTDamageSkins = () => {
+        console.log('[Fetch] TFT Damage Skins');
+        axios.get(
+            Globals.PROXY_PREFIX + '/lol-game-data/assets/v1/tftdamageskins.json'
+        ).then((response) => {
+            if (response.data.errorCode) {
+                console.error('Failed to load TFT Damage Skins');
+                return;
+            }
+
+            const allTftDamageSkins = response.data as TFTDamageSkin[];
+            const tftDamageSkins = {} as TFTDamageSkinState;
+            allTftDamageSkins.forEach((companion) => {
+                tftDamageSkins[companion.itemId] = companion;
+            });
+
+            console.log(response.data);
+            console.log('[Fetch] TFT Damage Skins - Done');
+            dispatch(
+                ACTION_SET_TFT_DAMAGE_SKINS(
+                    tftDamageSkins
+                )
+            );
+        }).catch((error) => {
+            console.error(error);
+        });
+    };
+
     function fetchStaticData() {
         fetchChampions();
         fetchSkins();
@@ -706,6 +793,9 @@ export default function App() {
         fetchMapAssets();
         fetchChallengeData();
         fetchRegaliaData();
+        fetchTFTCompanionData();
+        fetchTFTMapSkins();
+        fetchTFTDamageSkins();
     }
 
     function createKeepAlive() {

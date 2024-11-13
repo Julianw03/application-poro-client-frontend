@@ -7,6 +7,9 @@ import LobbyMemberCard from './GameflowLobby/LobbyMemberCard';
 import {useState} from 'react';
 import GamemodeSelector from './GameflowNone/GamemodeSelector';
 import {DragType, FriendDragData, GenericDragAndDropData, LobbyState} from '../../../../types/Store';
+import DefaultLobby from './GameflowLobby/DefaultLobby';
+import TFTLobby from './GameflowLobby/TFTLobby';
+import ArenaLobby from './GameflowLobby/ArenaLobby';
 
 export interface GameflowLobbyProps {
     inQueue: boolean;
@@ -87,115 +90,19 @@ export default function GameflowLobby({inQueue}: GameflowLobbyProps) {
         }
     };
 
-    const renderDefaultInviteContainer = () => {
-        return (
-            <div className={styles.tftSingleGroup}>
-                <div className={styles.tftInviteButtonContainer}>
-                </div>
-            </div>
-        )
-    }
-
-    const renderTftLocalMember = (lobby: LobbyState | Record<string, never>) => {
-        if (!lobby.localMember) {
-            return <div className={styles.tftSelfGroup}/>;
-        }
-
-        return (
-            <div className={styles.tftSelfGroup}>
-                <div></div>
-            </div>
-        )
-    }
-
-    const renderTftLobbyMember = (lobby: LobbyState | Record<string, never>, index: number) => {
-        if (!lobby.members) {
-            return <></>
-        }
-
-        if (index >= lobby.members.length) {
-            return <></>
-        }
-
-        const puuid = lobby.members[index]?.puuid;
-        if (!puuid) {
-            return renderDefaultInviteContainer();
-        }
-
-        if (puuid === lobby.localMember.puuid) return (<></>);
-
-        return (
-            <div className={styles.tftSingleGroup}>
-
-            </div>
-        )
-    }
-
-    const renderTFTLobby = () => {
-        return (
-            <div className={styles.tftContainer}>
-                <div className={styles.tftSubGroup}>
-                    {renderTftLobbyMember(lobby, 0)}
-                    {renderTftLobbyMember(lobby, 3)}
-                    {renderTftLobbyMember(lobby, 6)}
-                </div>
-                <div className={styles.tftSubGroup}>
-                    {renderTftLocalMember(lobby)}
-                    {renderTftLobbyMember(lobby, 1)}
-                </div>
-                <div className={styles.tftSubGroup}>
-                    {renderTftLobbyMember(lobby, 2)}
-                    {renderTftLobbyMember(lobby, 5)}
-                    {renderTftLobbyMember(lobby, 7)}
-                </div>
-
-            </div>
-        );
-    };
-
-    const renderArenaLobby = () => {
-        return (
-            <></>
-        );
-    };
-
-    const renderDefaultLobby = () => {
-        return (
-            <>
-                <div className={styles.member_container}
-                     onDragOver={e => {
-                         onDragOver(e);
-                     }}
-                     onDrop={e => {
-                         onDrop(e);
-                     }}
-                >
-                    {
-                        lobby.members?.map(
-                            (member, index) => {
-                                const key = member.puuid ?? index;
-                                return <LobbyMemberCard member={member} key={key}/>;
-                            }
-                        )
-                    }
-                </div>
-            </>
-        );
-    };
-
     const renderContent = () => {
         //This is just for the "form" of the lobby (TFT lobbies should look different from normal lobbies)
         switch (lobby?.gameConfig?.gameMode) {
             case Globals.KNOWN_GAME_MODES.TFT:
-                return renderTFTLobby();
+                return <TFTLobby lobby={lobby}/>;
             case Globals.KNOWN_GAME_MODES.ARENA:
-                return renderArenaLobby();
+                return <ArenaLobby lobby={lobby}/>;
             case Globals.KNOWN_GAME_MODES.ARAM:
             case Globals.KNOWN_GAME_MODES.CLASSIC:
             //Use standard lobby as fallback
             // eslint-disable-next-line no-fallthrough
             default:
-                return renderDefaultLobby();
+                return <DefaultLobby lobby={lobby}/>;
         }
     };
 
@@ -233,7 +140,13 @@ export default function GameflowLobby({inQueue}: GameflowLobbyProps) {
                     Current Gamemode: {queues[lobby.gameConfig?.queueId]?.description}
                 </div>
             }
-            <div className={styles.divMiddle}>
+            <div className={styles.divMiddle}
+                onDragOver={e => {
+                    onDragOver(e);
+                }}
+                onDrop={e => {
+                    onDrop(e);
+                }}>
                 {
                     renderContent()
                 }

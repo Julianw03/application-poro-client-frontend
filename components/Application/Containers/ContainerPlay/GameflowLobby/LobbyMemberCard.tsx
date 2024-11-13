@@ -1,4 +1,4 @@
-import {ChallengeSummary, LevelMapping, LobbyMember, UserRegalia} from '../../../../../types/Store';
+import {ChallengeSummary, LevelMapping, LobbyMember, LobbyState, UserRegalia} from '../../../../../types/Store';
 import styles
     from '../../../../../styles/Application/Containers/ContainerPlay/GameflowLobby/LobbyMemberCard.module.css';
 import * as Globals from '../../../../../Globals';
@@ -10,9 +10,12 @@ import PrettyImage from '../../../../General/PrettyImage';
 import {useSelector} from 'react-redux';
 import {AppState} from '../../../../../store';
 import axios from 'axios';
+import GenericPosition, {Position} from '../../../../General/svg/position/Position';
+import {Color} from '../../../../../types/Color';
 
 export interface LobbyMemberCardProps {
     member: LobbyMember | Record<string, never>;
+    lobby: LobbyState | null;
 }
 
 export default function LobbyMemberCard(props: LobbyMemberCardProps) {
@@ -21,6 +24,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
 
     const regaliaMap = useSelector((state: AppState) => state.userRegalia);
     const challengeSummary = useSelector((state: AppState) => state.challengeSummary);
+    const skins = useSelector((state: AppState) => state.skins);
 
     const challengeData = useSelector((state: AppState) => state.challengeData);
 
@@ -51,44 +55,92 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return regaliaMap[member.summonerId];
     };
 
-    const renderPositionIcons = () => {
-        const firstPosition = member?.firstPositionPreference;
-        const secondPosition = member?.secondPositionPreference;
-        if (firstPosition === undefined || firstPosition === '') {
-            return (<></>);
+    const renderPositionIcons = (lobby: LobbyState | null) => {
+        if (lobby.gameConfig?.showQuickPlaySlotSelection) {
+            return (
+                <div className={styles.playerSlots}>
+                    {
+                        member?.playerSlots.map((slot, index) => {
+                            if (index >= 2) {
+                                return (<> </>);
+                            }
+
+                            const position = slot.positionPreference;
+                            const skin = skins?.[slot.championId * 1000];
+
+                            if (position == undefined || skin == undefined) {
+                                return (
+                                    <div className={styles.playerSlot} key={index}>
+                                    </div>
+                                );
+                            }
+
+                            return (
+                                <div className={styles.playerSlot} key={index}>
+                                    <PrettyImage
+                                        className={styles.slotImage}
+                                        imgProps={{
+                                            src: Globals.PROXY_PREFIX + skin.tilePath
+                                        }}
+                                    />
+                                    <div className={styles.slotPosition}>
+                                        <GenericPosition
+                                            position={Position[position]}
+                                            genericProps={{
+                                                className: styles.slotPositionImage,
+                                                color: Globals.BrandColor.GOLD5.hex,
+                                                highlightColor: Globals.BrandColor.GOLD3.hex
+                                            }}/>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+            );
         }
 
-        if (firstPosition === Globals.LOBBY_POSITIONS.FILL || firstPosition === Globals.LOBBY_POSITIONS.UNSELECTED) {
-            return (
-                <div className={styles.singlePositionContainer}>
-                    <div className={styles.position}>
-                        <PrettyImage
-                            className={`${styles.positionImage} ${styles.noDrag}`}
-                            imgProps={{
-                                src: getPositionIconUrl(firstPosition)
-                            }}
-                            useLoader={false}/>
+        if (lobby.gameConfig?.showPositionSelector) {
+            const firstPosition = member?.firstPositionPreference;
+            const secondPosition = member?.secondPositionPreference;
+
+            const maxMembers = lobby?.gameConfig?.maxLobbySize ?? 0;
+            const currentMemberCount = lobby?.members.filter((member) => member.puuid !== undefined).length ?? 0;
+            if (firstPosition === undefined || firstPosition === '') {
+                return (<></>);
+            }
+            if (firstPosition === Globals.LOBBY_POSITIONS.FILL || firstPosition === Globals.LOBBY_POSITIONS.UNSELECTED || maxMembers === currentMemberCount) {
+                return (
+                    <div className={styles.singlePositionContainer}>
+                        <div className={styles.position}>
+                            <PrettyImage
+                                className={`${styles.positionImage} ${styles.noDrag}`}
+                                imgProps={{
+                                    src: getPositionIconUrl(firstPosition)
+                                }}
+                                useLoader={false}/>
+                        </div>
                     </div>
-                </div>
-            );
-        } else {
-            return (
-                <div className={styles.dualPositionsContainer}>
-                    <div className={styles.position}>
-                        <PrettyImage
-                            imgProps={{
-                                src: getPositionIconUrl(firstPosition),
+                );
+            } else {
+                return (
+                    <div className={styles.dualPositionsContainer}>
+                        <div className={styles.position}>
+                            <PrettyImage
+                                imgProps={{
+                                    src: getPositionIconUrl(firstPosition),
+                                    className: styles.positionImage
+                                }}/>
+                        </div>
+                        <div className={styles.position}>
+                            <PrettyImage imgProps={{
+                                src: getPositionIconUrl(secondPosition),
                                 className: styles.positionImage
                             }}/>
+                        </div>
                     </div>
-                    <div className={styles.position}>
-                        <PrettyImage imgProps={{
-                            src: getPositionIconUrl(secondPosition),
-                            className: styles.positionImage
-                        }}/>
-                    </div>
-                </div>
-            );
+                );
+            }
         }
     };
 
@@ -96,11 +148,11 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return (
             <div className={styles.rankedAnimatedContainer}>
                 <video draggable={false} className={`${styles.rankedVideo} ${styles.noDrag}`}
-                    src={getWingsUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} autoPlay={true}
-                    controls={false}
-                    muted={true} loop={true}/>
+                       src={getWingsUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} autoPlay={true}
+                       controls={false}
+                       muted={true} loop={true}/>
                 <img draggable={false} className={`${styles.rankedImage} ${styles.noDrag}`}
-                    src={getPlateUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} alt={''}/>
+                     src={getPlateUrl(getRegaliaForMember(member)?.highestRankedEntry.tier)} alt={''}/>
             </div>
         );
     };
@@ -109,7 +161,10 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return (
             <>
                 <img className={styles.prestigeImage} draggable={false}
-                    src={getPrestigeRegaliaUrl(getRegaliaForMember(member)?.selectedPrestigeCrest)} alt={''}/>
+                     src={getPrestigeRegaliaUrl(getRegaliaForMember(member)?.selectedPrestigeCrest ?? Math.floor(Math.min(
+                         getRegaliaForMember(member)?.summonerLevel ?? 525,
+                         525
+                     ) / 25))} alt={''}/>
             </>
         );
     };
@@ -139,8 +194,8 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
         return (
             <div className={styles.profileContainer}>
                 <img draggable={false} className={`${styles.profileImage} ${styles.noDrag}`}
-                    src={Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/profile-icons/' + regalia?.profileIconId + '.jpg'}
-                    alt={''}/>
+                     src={Globals.PROXY_STATIC_PREFIX + '/lol-game-data/assets/v1/profile-icons/' + regalia?.profileIconId + '.jpg'}
+                     alt={''}/>
                 {regalia?.crestType === 'ranked' ? renderRankedRegalia() : renderNormalRegalia()}
                 {
                     renderChallengeIndicator(challengeEntry)
@@ -192,7 +247,7 @@ export default function LobbyMemberCard(props: LobbyMemberCardProps) {
                         renderChallengeIcons()
                     }
                 </div>
-                {renderPositionIcons()}
+                {renderPositionIcons(props.lobby)}
             </div>
         );
     };

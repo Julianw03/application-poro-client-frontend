@@ -22,14 +22,14 @@ export class Color {
         return this.b;
     }
 
-    get hex(): string {
-        return `#${this.r.toString(16)}${this.g.toString(16)}${this.b.toString(16)}`;
+    get hex() {
+        return `#${this.r.toString(16).padStart(2, '0')}${this.g.toString(16).padStart(2, '0')}${this.b.toString(16).padStart(2, '0')}`;
     }
 
     static fromHex(hex: string): Color {
-        const r = parseInt(hex.substring(1, 2), 16);
-        const g = parseInt(hex.substring(3, 2), 16);
-        const b = parseInt(hex.substring(5, 2), 16);
+        const r = parseInt(hex.substring(1, 3), 16);
+        const g = parseInt(hex.substring(3, 5), 16);
+        const b = parseInt(hex.substring(5, 7), 16);
         return new Color(r, g, b);
     }
 }

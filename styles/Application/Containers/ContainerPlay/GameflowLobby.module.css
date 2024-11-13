@@ -68,6 +68,11 @@
     height: 50%;
     aspect-ratio: 1;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
     border-radius: 1000000px;
     border: red solid 2px;
 }
@@ -190,11 +195,11 @@
     display: flex;
 
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .divCancelGameButton {
-    height: 100%;
+    height: 90%;
     width: 20%;
     cursor: pointer;
 
@@ -217,7 +222,7 @@
 }
 
 .divStartGameButton {
-    height: 100%;
+    height: 90%;
     width: 20%;
     cursor: pointer;
 
